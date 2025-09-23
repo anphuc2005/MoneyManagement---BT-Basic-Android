@@ -60,6 +60,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/login_btn"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:text="Login"
@@ -72,6 +73,7 @@
             />
 
         <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/register_btn"
             android:layout_width="160dp"
             android:layout_height="60dp"
             android:text="Register"
