@@ -1,60 +1,210 @@
 package com.example.moneymanagement.view.fragment_inside
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanagement.R
+import com.example.moneymanagement.adapter.CategorySelectionAdapter
+import com.example.moneymanagement.data.model.Category
+import com.example.moneymanagement.data.model.TransactionDatabase
+import com.example.moneymanagement.data.model.TransactionType
+import com.example.moneymanagement.data.repository.TransactionRepository
+import com.example.moneymanagement.databinding.FragmentAddTransactionBinding
+import com.example.moneymanagement.viewmodel.TransactionViewModel
+import com.example.moneymanagement.viewmodel.TransactionViewModelFactory
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [AddTransactionFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class AddTransactionFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentAddTransactionBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var transactionViewModel: TransactionViewModel
+
+    private var selectedCategory: Category? = null
+    private var selectedDate: Date = Date() // Default to today
+    private var currentTransactionType = TransactionType.EXPENSE
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_transaction, container, false)
+    ): View {
+        _binding = FragmentAddTransactionBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddTransactionFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddTransactionFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupViewModel()
+        setupUI()
+        setupClickListener()
+    }
+
+    private fun setupViewModel() {
+        val database = TransactionDatabase.getDatabase(requireContext())
+        val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
+        val factory = TransactionViewModelFactory(repository)
+        transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
+    }
+
+    private fun setupUI() {
+        updateDateDisplay()
+    }
+
+    private fun setupClickListener() {
+        binding.etDate.setOnClickListener {
+            showDatePicker()
+        }
+
+        binding.tilDate.setEndIconOnClickListener {
+            showDatePicker()
+        }
+
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        binding.etCategory.setOnClickListener {
+            Toast.makeText(context, "Chọn category", Toast.LENGTH_SHORT).show()
+            showCategorySelection()
+        }
+
+        binding.btnSave.setOnClickListener {
+            saveTransaction()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun showDatePicker() {
+        val builder = MaterialDatePicker.Builder.datePicker()
+        builder.setTitleText("Chọn ngày giao dịch")
+        builder.setSelection(selectedDate.time)
+
+        val picker = builder.build()
+
+        picker.addOnPositiveButtonClickListener { selection ->
+            selectedDate = Date(selection)
+            updateDateDisplay()
+            binding.tilDate.error = null
+        }
+
+        picker.show(parentFragmentManager, "DATE_PICKER")
+    }
+
+
+
+    private fun updateDateDisplay() {
+        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale("vi", "VN"))
+        binding.etDate.setText(formatter.format(selectedDate))
+    }
+
+    private fun saveTransaction() {
+        val transactionName = binding.etTransactionName.text.toString().trim()
+        val amountText = binding.etAmount.text.toString().trim()
+        val note = binding.etNote.text.toString().trim()
+
+        if (!validateInput(transactionName, amountText)) {
+            return
+        }
+
+        val amount = amountText.toDouble()
+
+        transactionViewModel.insertTransaction(
+            transaction_name = transactionName,
+            amount = amount,
+            category_id = selectedCategory?.id ?: 1,
+            date = selectedDate,
+            note = note
+        )
+
+        Toast.makeText(context, "Đã thêm giao dịch thành công", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
+    }
+
+    private fun validateInput(transactionName: String, amountText: String): Boolean {
+        var isValid = true
+
+        binding.tilTransactionName.error = null
+        binding.tilAmount.error = null
+        binding.tilCategory.error = null
+
+        if (transactionName.isEmpty()) {
+            binding.tilTransactionName.error = "Vui lòng nhập tên giao dịch"
+            isValid = false
+        }
+
+        // Validate amount
+        if (amountText.isEmpty()) {
+            binding.tilAmount.error = "Vui lòng nhập số tiền"
+            isValid = false
+        } else {
+            try {
+                val amount = amountText.toDouble()
+                if (amount <= 0) {
+                    binding.tilAmount.error = "Số tiền phải lớn hơn 0"
+                    isValid = false
                 }
+            } catch (e: NumberFormatException) {
+                binding.tilAmount.error = "Số tiền không hợp lệ"
+                isValid = false
             }
+        }
+
+        return isValid
+    }
+
+    private fun showCategorySelection() {
+        transactionViewModel.allCategories.observe(viewLifecycleOwner) { categories ->
+            if (categories.isEmpty()) {
+                Toast.makeText(context, "Đang tải danh mục...", Toast.LENGTH_SHORT).show()
+                return@observe
+            }
+
+            val bottomSheetDialog =
+                BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+            val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_category_selection, null)
+
+            val recyclerView = bottomSheetView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_categories)
+            val btnClose = bottomSheetView.findViewById<android.widget.ImageView>(R.id.btn_close)
+
+            val adapter = CategorySelectionAdapter { category ->
+                selectedCategory = category
+                binding.etCategory.setText(category.type_name)
+                binding.tilCategory.error = null
+                bottomSheetDialog.dismiss()
+            }
+
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = adapter
+            adapter.submitList(categories)
+
+            btnClose?.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
+
+            bottomSheetDialog.setContentView(bottomSheetView)
+            bottomSheetDialog.show()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.moneymanagement.R
 import com.example.moneymanagement.databinding.FragmentLoginBinding
+import com.example.moneymanagement.view.AuthActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginFragment : Fragment() {
@@ -61,7 +62,7 @@ class LoginFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(requireContext(), "Login success", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                    (activity as? AuthActivity)?.goToMainActivity()
                 } else {
                     Toast.makeText(requireContext(), "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }

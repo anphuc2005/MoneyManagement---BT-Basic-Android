@@ -76,7 +76,7 @@ class RegisterFragment : Fragment() {
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(requireContext(), "Register success", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_registerFragment_to_inputProfileFragment2)
+                findNavController().navigate(R.id.action_registerFragment_to_inputProfileFragment)
             } else {
                 Toast.makeText(
                     requireContext(),

@@ -18,9 +18,9 @@ class TransactionRepository(
         return transactionDao.getAllTransactionsWithCategory()
     }
 
-    fun getTransactionsByDate(date: String): LiveData<List<TransactionWithCategory>> {
-        return transactionDao.getTransactionsByDate(date)
-    }
+//    fun getTransactionsByDate(date: String): LiveData<List<TransactionWithCategory>> {
+//        return transactionDao.getTransactionsByDate(date)
+//    }
 
     fun getTransactionsByType(type: TransactionType): LiveData<List<TransactionWithCategory>> {
         return transactionDao.getTransactionsByType(type)
@@ -67,7 +67,7 @@ class TransactionRepository(
     }
 
     // Statistics
-    suspend fun getMonthlyStatistics(startDate: String, endDate: String): List<MonthlyStatistic> {
-        return transactionDao.getMonthlyStatistics(startDate, endDate)
-    }
+//    suspend fun getMonthlyStatistics(startDate: String, endDate: String): List<MonthlyStatistic> {
+//        return transactionDao.getMonthlyStatistics(startDate, endDate)
+//    }
 }

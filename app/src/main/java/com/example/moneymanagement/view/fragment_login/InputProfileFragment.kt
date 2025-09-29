@@ -38,7 +38,7 @@ class InputProfileFragment : Fragment() {
     private fun setupListener() {
         binding.btnContinue.setOnClickListener {
             submitData()
-            findNavController().navigate(R.id.action_inputProfileFragment_to_loginFragment2)
+            findNavController().navigate(R.id.action_inputProfileFragment_to_loginFragment)
         }
 
         binding.dateInputLayout.setEndIconOnClickListener {

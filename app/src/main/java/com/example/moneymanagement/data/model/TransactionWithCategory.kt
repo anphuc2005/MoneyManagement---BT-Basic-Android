@@ -6,7 +6,7 @@ import androidx.room.Relation
 data class TransactionWithCategory(
     @Embedded val transaction: Transactions,
     @Relation(
-        parentColumn = "categoryId",
+        parentColumn = "category_id",
         entityColumn = "id"
     )
     val category: Category

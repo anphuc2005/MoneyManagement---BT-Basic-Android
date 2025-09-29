@@ -9,7 +9,6 @@ import java.util.Date
 data class Category(
     @PrimaryKey val id: Int,
     val type_name: String,
-    val type: TransactionType,
-    val created_at : Date,
-    val update_at: Date
+    val icon: String,
+    val type: TransactionType
 )
