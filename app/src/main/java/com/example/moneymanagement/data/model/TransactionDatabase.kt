@@ -50,21 +50,21 @@ abstract class TransactionDatabase : RoomDatabase() {
 
         suspend fun populateDatabase(categoryDao: CategoryDao) {
             val defaultCategories = listOf(
-                Category(1, "Lương", "salary_icon", TransactionType.INCOME),
-                Category(2, "Thưởng", "bonus_icon", TransactionType.INCOME),
-                Category(3, "Đầu tư", "investment_icon", TransactionType.INCOME),
-                Category(4, "Khác", "other_income_icon", TransactionType.INCOME),
-                Category(5, "Thực phẩm", "food_icon", TransactionType.EXPENSE),
-                Category(6, "Cà phê", "coffee_icon", TransactionType.EXPENSE),
-                Category(7, "Xăng xe", "gas_icon", TransactionType.EXPENSE),
-                Category(8, "Thời trang", "fashion_icon", TransactionType.EXPENSE),
-                Category(9, "Giải trí", "entertainment_icon", TransactionType.EXPENSE),
-                Category(10, "Thú cưng", "pet_icon", TransactionType.EXPENSE),
-                Category(11, "Giáo dục", "education_icon", TransactionType.EXPENSE),
-                Category(12, "Y tế", "medical_icon", TransactionType.EXPENSE),
-                Category(13, "Du lịch", "travel_icon", TransactionType.EXPENSE),
-                Category(14, "Hoá đơn tiền", "bill_icon", TransactionType.EXPENSE),
-                Category(15, "Quà tặng", "gift_icon", TransactionType.EXPENSE)
+                Category(1, "Lương", "salary", TransactionType.INCOME),
+                Category(2, "Thưởng", "bonus", TransactionType.INCOME),
+                Category(3, "Đầu tư", "investment", TransactionType.INCOME),
+                Category(4, "Tiền khác", "other_money", TransactionType.INCOME),
+                Category(5, "Thực phẩm", "food", TransactionType.EXPENSE),
+                Category(6, "Cà phê", "coffee", TransactionType.EXPENSE),
+                Category(7, "Di chuyển", "gas", TransactionType.EXPENSE),
+                Category(8, "Thời trang", "fashion", TransactionType.EXPENSE),
+                Category(9, "Giải trí", "entertainment", TransactionType.EXPENSE),
+                Category(10, "Thú cưng", "pet", TransactionType.EXPENSE),
+                Category(11, "Giáo dục", "education", TransactionType.EXPENSE),
+                Category(12, "Y tế", "medical", TransactionType.EXPENSE),
+                Category(13, "Du lịch", "travel", TransactionType.EXPENSE),
+                Category(14, "Hoá đơn nước", "bill", TransactionType.EXPENSE),
+                Category(15, "Quà tặng", "gift", TransactionType.EXPENSE)
             )
 
             categoryDao.insertCategories(defaultCategories)

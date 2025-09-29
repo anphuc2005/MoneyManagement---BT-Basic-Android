@@ -1,6 +1,7 @@
 package com.example.moneymanagement.view.fragment_inside
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.TransactionAdapter
+import com.example.moneymanagement.data.data_class.TransactionGroupHelper
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import com.example.moneymanagement.data.repository.TransactionRepository
@@ -27,15 +29,10 @@ class HomeFragment : Fragment() {
     private lateinit var transactionViewModel: TransactionViewModel
     private lateinit var transactionAdapter: TransactionAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -46,12 +43,12 @@ class HomeFragment : Fragment() {
         setupViewModel()
         setupRecyclerView()
         observeData()
-        setupClickListeners()
+        updateUserName()
     }
 
     private fun setupViewModel() {
-        val datebase = TransactionDatabase.getDatabase(requireContext())
-        val repository = TransactionRepository(datebase.transactionDao(), datebase.categoryDao())
+        val database = TransactionDatabase.getDatabase(requireContext())
+        val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
         val factory = TransactionViewModelFactory(repository)
         transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
     }
@@ -60,44 +57,82 @@ class HomeFragment : Fragment() {
         transactionAdapter = TransactionAdapter { transaction ->
             showTransactionDetails(transaction)
         }
+
         binding.transactionRecyclerView.apply {
             adapter = transactionAdapter
             layoutManager = LinearLayoutManager(context)
-            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+
         }
     }
 
     private fun observeData() {
         transactionViewModel.allTransaction.observe(viewLifecycleOwner) { transactions ->
-            transactionAdapter.submitList(transactions)
-//            updateChartData(transactions)
+            Log.d("HomeFragment", "Received transactions: ${transactions?.size}")
+            transactions?.forEach {
+                Log.d("HomeFragment", "Transaction: ${it.transaction.transaction_name}, Amount: ${it.transaction.amount}, Date: ${it.transaction.date}")
+            }
+
+            if (transactions.isNullOrEmpty()) {
+                binding.transactionRecyclerView.visibility = View.GONE
+            } else {
+                Log.d("HomeFragment", "Showing ${transactions.size} transactions")
+                binding.transactionRecyclerView.visibility = View.VISIBLE
+
+                Log.d("HomeFragment", "Adapter item count before: ${transactionAdapter.itemCount}")
+                val groupedItems = TransactionGroupHelper.groupTransactionsByDate(transactions)
+
+                transactionAdapter.submitList(groupedItems) {
+                    Log.d("HomeFragment", "Adapter item count after submitList completed: ${transactionAdapter.itemCount}")
+                    binding.transactionRecyclerView.scrollToPosition(0)
+                }
+
+                updateChartData(transactions)
+            }
         }
 
         lifecycleScope.launch {
             val summary = transactionViewModel.getTransactionSummary()
-//            updateSummaryUI(summary)
+            updateSummaryUI(summary)
         }
     }
 
-    private fun setupClickListeners() {
-//        binding.fabAdd.setOnClickListener {
-//            // Navigate to Add Transaction screen
-//            findNavController().navigate(R.id.action_homeFragment_to_addTransactionFragment)
-//        }
+
+    private fun updateUserName() {
+        val sharedPref = requireActivity().getSharedPreferences("user_prefs", android.content.Context.MODE_PRIVATE)
+        val userName = sharedPref.getString("user_name", "Minh Hoa") ?: "Minh Hoa"
+        binding.userName.text = userName
     }
 
-//    private fun updateUserName() {
-//        // Get user name from preferences or database
-//        val userName = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-//            .getString("user_name", "Minh Hoa") ?: "Minh Hoa"
-//        binding.userName.text = userName
-//    }
+    private fun updateChartData(transactions: List<TransactionWithCategory>) {
+        val incomeTotal = transactions
+            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.INCOME }
+            .sumOf { it.transaction.amount }
+
+        val expenseTotal = transactions
+            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.EXPENSE }
+            .sumOf { it.transaction.amount }
+
+        // TODO: Update chart with data
+    }
+
+    private fun updateSummaryUI(summary: com.example.moneymanagement.data.model.TransactionSummary) {
+        // TODO: Update summary UI
+    }
 
     private fun showTransactionDetails(transaction: TransactionWithCategory) {
-        // Navigate to transaction detail screen or show dialog
-//        val action = HomeFragmentDirections.actionHomeToTransactionDetail(transaction.transaction.id)
-//        findNavController().navigate(action)
+        // TODO: Show transaction details
     }
 
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            val summary = transactionViewModel.getTransactionSummary()
+            updateSummaryUI(summary)
+        }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

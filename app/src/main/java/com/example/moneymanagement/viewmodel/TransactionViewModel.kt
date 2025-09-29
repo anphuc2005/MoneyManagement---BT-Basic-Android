@@ -1,5 +1,6 @@
 package com.example.moneymanagement.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneymanagement.data.model.TransactionSummary
@@ -21,23 +22,28 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         transaction_name: String,
         amount: Double,
         category_id: Int,
-        date: Date,
+        date: String,
         note: String = ""
     ) {
         viewModelScope.launch {
             val category = repository.getCategoryById(category_id)
+            Log.d("TransactionVM", "Category found: $category")
             if(category != null)
             {
                 val transaction = Transactions(
                     transaction_name = transaction_name,
                     amount = amount,
                     category_id = category_id,
-//                    date = date,
+                    date = date,
                     note = note,
                     type = category.type,
                     user_id = 0
                 )
+                Log.d("TransactionVM", "Transaction inserted: $transaction")
                 repository.insertTransaction(transaction)
+            }
+            else {
+                Log.e("TransactionVM", "Category not found with id: $category_id")
             }
         }
     }

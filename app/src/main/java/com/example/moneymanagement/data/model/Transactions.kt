@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity(
     tableName = "transactions",
@@ -25,7 +24,7 @@ data class Transactions(
     val category_id: Int,
     val transaction_name: String,
     val amount: Double,
-//    val date: Date,
+    val date: String,
     val note: String,
     val type: TransactionType,
     val createdAt: Long = System.currentTimeMillis()

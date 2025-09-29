@@ -1,40 +1,58 @@
 package com.example.moneymanagement.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moneymanagement.data.data_class.TransactionListItem
 import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import com.example.moneymanagement.databinding.ItemTransactionBinding
 
 class TransactionAdapter(
     private val onItemClick: (TransactionWithCategory) -> Unit
-) : ListAdapter<TransactionWithCategory, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
+) : ListAdapter<TransactionListItem, TransactionAdapter.TransactionViewHolder>(TransactionDiffCallback()) {
 
-    inner class TransactionViewHolder(private val binding : ItemTransactionBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(transactionWithCategory: TransactionWithCategory) {
+    inner class TransactionViewHolder(private val binding: ItemTransactionBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bindDateHeader(dateHeader: TransactionListItem.DateHeader) {
+            binding.apply {
+                dateHeaderLayout.visibility = View.VISIBLE
+                dateText.text = dateHeader.date
+                dayTypeText.text = dateHeader.dayOfWeek
+            }
+        }
+
+        fun bindTransaction(transactionWithCategory: TransactionWithCategory) {
             val transaction = transactionWithCategory.transaction
             val category = transactionWithCategory.category
 
             binding.apply {
-//                val iconRes = getIconResource(root.context, category.icon)
-//                if (iconRes != 0) {
-//                    binding.transactionIcon.setImageResource(iconRes)
-//                }
+                // Ẩn date header cho transaction items
+                dateHeaderLayout.visibility = View.GONE
 
-
-                binding.transactionTitle.text = transaction.transaction_name
-                binding.transactionCategory.text = category.type_name
-
-
-                binding.transactionAmount.text = when (transaction.type) {
-                    TransactionType.INCOME -> "+${transaction.amount}"
-                    TransactionType.EXPENSE -> "-${transaction.amount}"
+                val iconRes = root.context.resources.getIdentifier(
+                    category.icon,
+                    "drawable",
+                    root.context.packageName
+                )
+                if (iconRes != 0) {
+                    transactionIcon.setImageResource(iconRes)
                 }
 
-                binding.transactionAmount.setTextColor(
+                transactionTitle.text = transaction.transaction_name
+                transactionCategory.text = category.type_name
+
+                transactionAmount.text = when (transaction.type) {
+                    TransactionType.INCOME -> "+${formatCurrency(transaction.amount)}"
+                    TransactionType.EXPENSE -> "-${formatCurrency(transaction.amount)}"
+                }
+
+                transactionAmount.setTextColor(
                     ContextCompat.getColor(
                         root.context,
                         when (transaction.type) {
@@ -44,26 +62,19 @@ class TransactionAdapter(
                     )
                 )
 
-//                binding.dateText.text = DateUtil.formatDateForDisplay(transaction.date)
-//
-//
-//                if (transaction.note.isNotEmpty()) {
-//                    tvNote.text = transaction.note
-//                    tvNote.visibility = View.VISIBLE
-//                } else {
-//                    tvNote.visibility = View.GONE
-//                }
-
-                // Click listener
                 root.setOnClickListener {
                     onItemClick(transactionWithCategory)
                 }
             }
+        }
 
+        private fun formatCurrency(amount: Double): String {
+            return String.format("%,.0f đ", amount)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
+        Log.d("TransactionAdapter", "onCreateViewHolder called")
         val binding = ItemTransactionBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -73,6 +84,13 @@ class TransactionAdapter(
     }
 
     override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        when (val item = getItem(position)) {
+            is TransactionListItem.DateHeader -> {
+                holder.bindDateHeader(item)
+            }
+            is TransactionListItem.TransactionItem -> {
+                holder.bindTransaction(item.transactionWithCategory)
+            }
+        }
     }
 }

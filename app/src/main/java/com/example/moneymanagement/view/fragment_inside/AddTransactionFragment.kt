@@ -34,7 +34,7 @@ class AddTransactionFragment : Fragment() {
     private lateinit var transactionViewModel: TransactionViewModel
 
     private var selectedCategory: Category? = null
-    private var selectedDate: Date = Date() // Default to today
+    private var selectedDate: Date = Date()
     private var currentTransactionType = TransactionType.EXPENSE
 
     override fun onCreateView(
@@ -118,6 +118,7 @@ class AddTransactionFragment : Fragment() {
         val transactionName = binding.etTransactionName.text.toString().trim()
         val amountText = binding.etAmount.text.toString().trim()
         val note = binding.etNote.text.toString().trim()
+        val date = binding.etDate.text.toString().trim()
 
         if (!validateInput(transactionName, amountText)) {
             return
@@ -129,7 +130,7 @@ class AddTransactionFragment : Fragment() {
             transaction_name = transactionName,
             amount = amount,
             category_id = selectedCategory?.id ?: 1,
-            date = selectedDate,
+            date = date,
             note = note
         )
 
@@ -149,7 +150,6 @@ class AddTransactionFragment : Fragment() {
             isValid = false
         }
 
-        // Validate amount
         if (amountText.isEmpty()) {
             binding.tilAmount.error = "Vui lòng nhập số tiền"
             isValid = false

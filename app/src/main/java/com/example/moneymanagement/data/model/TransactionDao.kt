@@ -14,9 +14,9 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions ORDER BY createdAt DESC")
     fun getAllTransactionsWithCategory(): LiveData<List<TransactionWithCategory>>
 
-//    @Transaction
-//    @Query("SELECT * FROM transactions WHERE date = :date ORDER BY createdAt DESC")
-//    fun getTransactionsByDate(date: String): LiveData<List<TransactionWithCategory>>
+    @Transaction
+    @Query("SELECT * FROM transactions WHERE date = :date ORDER BY createdAt DESC")
+    fun getTransactionsByDate(date: String): LiveData<List<TransactionWithCategory>>
 
     @Transaction
     @Query("SELECT * FROM transactions WHERE type = :type ORDER BY createdAt DESC")
