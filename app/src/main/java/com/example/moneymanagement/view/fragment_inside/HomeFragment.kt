@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.TransactionAdapter
+import com.example.moneymanagement.data.data_class.LineChartHelper
 import com.example.moneymanagement.data.data_class.TransactionGroupHelper
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionWithCategory
@@ -112,7 +113,10 @@ class HomeFragment : Fragment() {
             .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.EXPENSE }
             .sumOf { it.transaction.amount }
 
-        // TODO: Update chart with data
+        Log.d("HomeFragment", "Income: $incomeTotal, Expense: $expenseTotal")
+
+        // Setup LineChart với dữ liệu thực
+        LineChartHelper.setupLineChart(binding.chartContainer, transactions)
     }
 
     private fun updateSummaryUI(summary: com.example.moneymanagement.data.model.TransactionSummary) {
