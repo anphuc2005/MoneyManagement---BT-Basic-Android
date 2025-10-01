@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="bg_color">#161B27</color>
     <color name="btn_color">#1F41BB</color>
+    <color name="wallet_income">#FC00A8</color>
+    <color name="waller_expense">#46BB1D</color>
 </resources>
