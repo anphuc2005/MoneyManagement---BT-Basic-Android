@@ -167,6 +167,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageButton
+            android:id="@+id/btn_gg"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/google"
@@ -177,6 +178,7 @@
             android:layout_marginEnd="15dp"/>
 
         <ImageButton
+            android:id="@+id/btn_fb"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/fb"
@@ -187,6 +189,7 @@
             android:layout_marginEnd="15dp"/>
 
         <ImageButton
+            android:id="@+id/btn_apple"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/apple"

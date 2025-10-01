@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/nav_overview">
+
+    <fragment
+        android:id="@+id/nav_overview"
+        android:name="com.example.moneymanagement.view.fragment_inside.HomeFragment"
+        android:label="Sổ giao dịch"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_wallet"
+        android:name="com.example.moneymanagement.view.fragment_inside.WalletFragment"
+        android:label="Ví tiền"
+        tools:layout="@layout/fragment_wallet" />
+
+    <fragment
+        android:id="@+id/nav_statistics"
+        android:name="com.example.moneymanagement.view.fragment_inside.StatisticalFragment"
+        android:label="Thống kê"
+        tools:layout="@layout/fragment_statistical" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.moneymanagement.view.fragment_inside.SettingFragment"
+        android:label="Cài đặt"
+        tools:layout="@layout/fragment_setting" >
+        <action
+            android:id="@+id/action_setting_to_language"
+            app:destination="@id/languageFragment" />
+        <action
+            android:id="@+id/action_setting_to_typeManagement"
+            app:destination="@id/typeManagementFragment" />
+        <action
+            android:id="@+id/action_setting_to_friend"
+            app:destination="@id/friendFragment" />
+        <action
+            android:id="@+id/action_setting_to_account"
+            app:destination="@id/accountFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="com.example.moneymanagement.view.fragment_inside.AddTransactionFragment"
+        android:label="Thêm giao dịch"
+        tools:layout="@layout/fragment_add_transaction" />
+
+    <!-- Các màn trong Setting -->
+    <fragment
+        android:id="@+id/languageFragment"
+        android:name="com.example.moneymanagement.view.fragment_setting.LanguageFragment"
+        android:label="Ngôn ngữ"
+        tools:layout="@layout/fragment_language" />
+
+    <fragment
+        android:id="@+id/typeManagementFragment"
+        android:name="com.example.moneymanagement.view.fragment_setting.TypeManagementFragment"
+        android:label="Quản lý loại"
+        tools:layout="@layout/fragment_type_management" />
+
+    <fragment
+        android:id="@+id/friendFragment"
+        android:name="com.example.moneymanagement.view.fragment_setting.FriendFragment"
+        android:label="Bạn bè"
+        tools:layout="@layout/fragment_friend" />
+
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.moneymanagement.view.fragment_setting.AccountFragment"
+        android:label="Tài khoản"
+        tools:layout="@layout/fragment_account" />
+
+</navigation>

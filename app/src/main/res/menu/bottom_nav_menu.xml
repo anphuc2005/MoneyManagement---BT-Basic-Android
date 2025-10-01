@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_overview"
+        android:icon="@drawable/transaction"
+        android:title="Sổ giao dịch" />
+
+    <item
+        android:id="@+id/nav_wallet"
+        android:icon="@drawable/wallet"
+        android:title="Ví tiền" />
+
+    <item
+        android:id="@+id/nav_add"
+        android:icon="@drawable/transparent_placeholder"
+        android:title=""
+        android:enabled="false" />
+
+    <item
+        android:id="@+id/nav_statistics"
+        android:icon="@drawable/stats"
+        android:title="Thống kê" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/setting"
+        android:title="Cài đặt" />
+
+</menu>
