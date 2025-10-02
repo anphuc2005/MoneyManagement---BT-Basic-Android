@@ -6,4 +6,8 @@
     <color name="btn_color">#1F41BB</color>
     <color name="wallet_income">#FC00A8</color>
     <color name="waller_expense">#46BB1D</color>
+    <color name="cyan">#00D9FF</color>
+    <color name="orange">#FF9F40</color>
+    <color name="purple">#9D6CFF</color>
+    <color name="pink">#FF4D9F</color>
 </resources>

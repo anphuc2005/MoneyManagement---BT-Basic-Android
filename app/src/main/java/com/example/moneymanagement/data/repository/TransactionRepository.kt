@@ -9,6 +9,7 @@ import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import com.example.moneymanagement.data.model.Transactions
 
+
 class TransactionRepository(
     private val transactionDao: TransactionDao,
     private val categoryDao: CategoryDao
@@ -65,6 +66,29 @@ class TransactionRepository(
     suspend fun insertCategory(category: Category) {
         categoryDao.insertCategory(category)
     }
+
+    fun getMonthlyTransactions(type: TransactionType, year: Int, month: Int): LiveData<List<Transactions>> {
+        val startDate = String.format("%04d-%02d-01", year, month)
+        val endDate = String.format("%04d-%02d-31", year, month)
+        return transactionDao.getTransactionsByDateRange(type, startDate, endDate)
+    }
+
+    fun getTransactionsByCategory(type: TransactionType): LiveData<List<CategoryTotal>> {
+        return transactionDao.getTransactionsByCategory(type)
+    }
+
+    fun getMonthlyTotalByType(type: TransactionType, year: Int, month: Int): LiveData<Double> {
+        val startDate = String.format("%04d-%02d-01", year, month)
+        val endDate = String.format("%04d-%02d-31", year, month)
+        return transactionDao.getMonthlyTotalByType(type, startDate, endDate)
+    }
+
+    data class CategoryTotal(
+        val categoryName: String,
+        val total: Double
+    )
+
+
 
     // Statistics
 //    suspend fun getMonthlyStatistics(startDate: String, endDate: String): List<MonthlyStatistic> {

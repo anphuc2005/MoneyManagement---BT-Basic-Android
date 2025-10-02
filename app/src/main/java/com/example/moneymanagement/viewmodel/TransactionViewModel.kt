@@ -16,7 +16,9 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
     val allCategories = repository.getAllCategories()
 
     fun getTransactionByType(type: TransactionType) = repository.getTransactionsByType(type)
-    fun getCategoriesByType(type: TransactionType) = repository.getCategoriesByType(type)
+    fun getTransactionsByCategory(type: TransactionType) = repository.getTransactionsByCategory(type)
+    suspend fun getTotalIncome() = repository.getTotalIncome()
+    suspend fun getTotalExpense() = repository.getTotalExpense()
 
     fun insertTransaction(
         transaction_name: String,
