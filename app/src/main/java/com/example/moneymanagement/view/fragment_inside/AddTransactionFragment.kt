@@ -1,18 +1,20 @@
 package com.example.moneymanagement.view.fragment_inside
 
-import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.CategorySelectionAdapter
+import com.example.moneymanagement.data.data_class.UserManager
 import com.example.moneymanagement.data.model.Category
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionType
@@ -37,6 +39,8 @@ class AddTransactionFragment : Fragment() {
     private var selectedDate: Date = Date()
     private var currentTransactionType = TransactionType.EXPENSE
 
+    private var currentCategories: List<Category> = emptyList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,6 +55,7 @@ class AddTransactionFragment : Fragment() {
         setupViewModel()
         setupUI()
         setupClickListener()
+        observeCategories()
     }
 
     private fun setupViewModel() {
@@ -78,7 +83,6 @@ class AddTransactionFragment : Fragment() {
         }
 
         binding.etCategory.setOnClickListener {
-            Toast.makeText(context, "Chọn category", Toast.LENGTH_SHORT).show()
             showCategorySelection()
         }
 
@@ -88,6 +92,13 @@ class AddTransactionFragment : Fragment() {
 
         binding.btnCancel.setOnClickListener {
             findNavController().popBackStack()
+        }
+    }
+
+    private fun observeCategories() {
+        transactionViewModel.allCategories.observe(viewLifecycleOwner) { categories ->
+            currentCategories = categories
+            Log.d("AddTransactionFragment", "Categories updated: ${categories.size} items")
         }
     }
 
@@ -107,14 +118,18 @@ class AddTransactionFragment : Fragment() {
         picker.show(parentFragmentManager, "DATE_PICKER")
     }
 
-
-
     private fun updateDateDisplay() {
         val formatter = SimpleDateFormat("dd/MM/yyyy", Locale("vi", "VN"))
         binding.etDate.setText(formatter.format(selectedDate))
     }
 
     private fun saveTransaction() {
+        val currentUserId = UserManager.getCurrentUserId()
+        if (currentUserId == null) {
+            Toast.makeText(context, "Không thể xác thực người dùng", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val transactionName = binding.etTransactionName.text.toString().trim()
         val amountText = binding.etAmount.text.toString().trim()
         val note = binding.etNote.text.toString().trim()
@@ -131,7 +146,8 @@ class AddTransactionFragment : Fragment() {
             amount = amount,
             category_id = selectedCategory?.id ?: 1,
             date = date,
-            note = note
+            userId = currentUserId,
+            note = note,
         )
 
         Toast.makeText(context, "Đã thêm giao dịch thành công", Toast.LENGTH_SHORT).show()
@@ -170,37 +186,37 @@ class AddTransactionFragment : Fragment() {
     }
 
     private fun showCategorySelection() {
-        transactionViewModel.allCategories.observe(viewLifecycleOwner) { categories ->
-            if (categories.isEmpty()) {
-                Toast.makeText(context, "Đang tải danh mục...", Toast.LENGTH_SHORT).show()
-                return@observe
-            }
-
-            val bottomSheetDialog =
-                BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
-            val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_category_selection, null)
-
-            val recyclerView = bottomSheetView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.rv_categories)
-            val btnClose = bottomSheetView.findViewById<android.widget.ImageView>(R.id.btn_close)
-
-            val adapter = CategorySelectionAdapter { category ->
-                selectedCategory = category
-                binding.etCategory.setText(category.type_name)
-                binding.tilCategory.error = null
-                bottomSheetDialog.dismiss()
-            }
-
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = adapter
-            adapter.submitList(categories)
-
-            btnClose?.setOnClickListener {
-                bottomSheetDialog.dismiss()
-            }
-
-            bottomSheetDialog.setContentView(bottomSheetView)
-            bottomSheetDialog.show()
+        if (currentCategories.isEmpty()) {
+            Toast.makeText(context, "Đang tải danh mục...", Toast.LENGTH_SHORT).show()
+            return
         }
+
+        val bottomSheetDialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogTheme)
+        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_category_selection, null)
+
+        val recyclerView = bottomSheetView.findViewById<RecyclerView>(R.id.rv_categories)
+        val btnClose = bottomSheetView.findViewById<ImageView>(R.id.btn_close)
+
+        val adapter = CategorySelectionAdapter { category ->
+            selectedCategory = category
+            binding.etCategory.setText(category.type_name)
+            binding.tilCategory.error = null
+            bottomSheetDialog.dismiss()
+        }
+
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+
+        adapter.submitList(currentCategories.toList())
+
+        Log.d("AddTransactionFragment", "Showing ${currentCategories.size} categories in bottom sheet")
+
+        btnClose?.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.setContentView(bottomSheetView)
+        bottomSheetDialog.show()
     }
 
     override fun onDestroyView() {

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,7 @@ import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.TransactionAdapter
 import com.example.moneymanagement.data.data_class.LineChartHelper
 import com.example.moneymanagement.data.data_class.TransactionGroupHelper
+import com.example.moneymanagement.data.data_class.UserManager
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import com.example.moneymanagement.data.repository.TransactionRepository
@@ -30,6 +32,8 @@ class HomeFragment : Fragment() {
     private lateinit var transactionViewModel: TransactionViewModel
     private lateinit var transactionAdapter: TransactionAdapter
 
+    private var currentUserId: String? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +45,17 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (!UserManager.isUserLoggedIn()) {
+            Toast.makeText(requireContext(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        currentUserId = UserManager.getCurrentUserId()
+
+        if (currentUserId == null) {
+            Toast.makeText(requireContext(), "Không thể lấy thông tin user", Toast.LENGTH_SHORT).show()
+            return
+        }
         setupViewModel()
         setupRecyclerView()
         observeData()
@@ -52,6 +67,11 @@ class HomeFragment : Fragment() {
         val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
         val factory = TransactionViewModelFactory(repository)
         transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
+
+        currentUserId?.let { userId ->
+            transactionViewModel.setUserId(userId)
+            Log.d("HomeFragment", "Set userId: $userId")
+        }
     }
 
     private fun setupRecyclerView() {
@@ -99,19 +119,32 @@ class HomeFragment : Fragment() {
 
 
     private fun updateUserName() {
+        val firebaseDisplayName = UserManager.getUserDisplayName()
+        val firebaseEmail = UserManager.getUserEmail()
+
         val sharedPref = requireActivity().getSharedPreferences("user_prefs", android.content.Context.MODE_PRIVATE)
-        val userName = sharedPref.getString("user_name", "Minh Hoa") ?: "Minh Hoa"
-        binding.userName.text = userName
+        val storedName = sharedPref.getString("user_name", null)
+
+        val displayName = firebaseDisplayName
+            ?: storedName
+            ?: firebaseEmail?.substringBefore("@")
+            ?: "User"
+
+        binding.userName.text = displayName
+
+        Log.d("HomeFragment", "Display name: $displayName")
     }
 
     private fun updateChartData(transactions: List<TransactionWithCategory>) {
-        val incomeTotal = transactions
-            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.INCOME }
-            .sumOf { it.transaction.amount }
-
-        val expenseTotal = transactions
-            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.EXPENSE }
-            .sumOf { it.transaction.amount }
+//        val incomeTotal = transactions
+//            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.INCOME }
+//            .sumOf { it.transaction.amount }
+//
+//        val expenseTotal = transactions
+//            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.EXPENSE }
+//            .sumOf { it.transaction.amount }
+        val incomeTotal = transactionViewModel.totalIncome.value ?: 0.0
+        val expenseTotal = transactionViewModel.totalExpense.value ?: 0.0
 
         Log.d("HomeFragment", "Income: $incomeTotal, Expense: $expenseTotal")
 

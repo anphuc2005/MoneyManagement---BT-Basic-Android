@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -15,6 +16,7 @@ import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.CategoryGroupAdapter
 import com.example.moneymanagement.data.data_class.CategoryGroupHelper
 import com.example.moneymanagement.data.data_class.CategoryListItem
+import com.example.moneymanagement.data.data_class.UserManager
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.model.TransactionWithCategory
@@ -44,9 +46,10 @@ class WalletFragment : Fragment() {
     private lateinit var transactionViewModel: TransactionViewModel
     private lateinit var categoryAdapter: CategoryGroupAdapter
 
+    private var currentUserId: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupViewModel()
     }
 
     override fun onCreateView(
@@ -59,6 +62,18 @@ class WalletFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (!UserManager.isUserLoggedIn()) {
+            Toast.makeText(requireContext(), "Vui lòng đăng nhập", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        currentUserId = UserManager.getCurrentUserId()
+
+        if (currentUserId == null) {
+            Toast.makeText(requireContext(), "Không thể lấy thông tin user", Toast.LENGTH_SHORT).show()
+            return
+        }
+        setupViewModel()
         setupRecyclerView()
         observeData()
     }
@@ -73,6 +88,10 @@ class WalletFragment : Fragment() {
         val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
         val factory = TransactionViewModelFactory(repository)
         transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
+        currentUserId?.let { userId ->
+            transactionViewModel.setUserId(userId)
+            Log.d("HomeFragment", "Set userId: $userId")
+        }
     }
 
     private fun setupRecyclerView() {
@@ -92,48 +111,44 @@ class WalletFragment : Fragment() {
             if (transactions.isNullOrEmpty()) {
                 binding.transactionRecyclerView.visibility = View.GONE
             } else {
-
+                binding.transactionRecyclerView.visibility = View.VISIBLE
                 val groupedItems = CategoryGroupHelper.groupCategory(transactions)
-
-                val groupedCategories = CategoryGroupHelper.groupCategory(transactions)
-
-                val totalIncome = CategoryGroupHelper.calculateTotalIncome(groupedCategories)
-                binding.tvBalance.text = String.format("%,.0f đ", totalIncome)
-
-                categoryAdapter.submitList(groupedItems) {
-                    Log.d("WalletFragment", "Adapter item count: ${categoryAdapter.itemCount}")
-                    if (groupedItems.isNotEmpty()) {
-                        binding.transactionRecyclerView.scrollToPosition(0)
-                    }
-                }
-
-                updateChartData(transactions)
+                categoryAdapter.submitList(groupedItems)
             }
         }
 
-        lifecycleScope.launch {
-            val summary = transactionViewModel.getTransactionSummary()
+        val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
+
+        transactionViewModel.balance.observe(viewLifecycleOwner) { balance ->
+            binding.tvBalance.text = formatter.format(balance ?: 0.0)
+        }
+
+        transactionViewModel.totalIncome.observe(viewLifecycleOwner) { income ->
+            binding.tvIncome.text = "+${formatter.format(income ?: 0.0)}"
+            updateProgressBar()
+        }
+
+        transactionViewModel.totalExpense.observe(viewLifecycleOwner) { expense ->
+            binding.tvExpense.text = "-${formatter.format(expense ?: 0.0)}"
+            updateProgressBar()
         }
     }
 
-    private fun updateChartData(transactions: List<TransactionWithCategory>) {
-        val groupCategories = CategoryGroupHelper.groupCategory(transactions)
+    private fun updateProgressBar() {
+        val totalIncome = transactionViewModel.totalIncome.value ?: 0.0
+        val totalExpense = transactionViewModel.totalExpense.value ?: 0.0
 
-        val totalIncome = CategoryGroupHelper.calculateTotalIncome(groupCategories)
-        val totalExpense = CategoryGroupHelper.calculateTotalExpense(groupCategories)
-        val balance = totalIncome - totalExpense
-
-        val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
-
-        binding.tvBalance.text = formatter.format(balance)
-        binding.tvIncome.text = "+${formatter.format(totalIncome)}"
-        binding.tvExpense.text = "-${formatter.format(totalExpense)}"
-
-        binding.incomeProgress.max = totalIncome.toInt()
-        binding.incomeProgress.progress = totalIncome.toInt()
-
-        binding.expenseProgress.max = totalIncome.toInt()
-        binding.expenseProgress.progress = totalExpense.toInt()
+        if (totalIncome > 0) {
+            binding.incomeProgress.max = totalIncome.toInt()
+            binding.expenseProgress.max = totalIncome.toInt()
+            binding.incomeProgress.progress = totalIncome.toInt()
+            binding.expenseProgress.progress = totalExpense.toInt()
+        } else {
+            binding.incomeProgress.max = 1
+            binding.expenseProgress.max = 1
+            binding.incomeProgress.progress = 0
+            binding.expenseProgress.progress = 0
+        }
     }
 
 

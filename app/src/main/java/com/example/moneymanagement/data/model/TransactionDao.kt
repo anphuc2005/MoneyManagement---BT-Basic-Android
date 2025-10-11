@@ -12,19 +12,19 @@ import com.example.moneymanagement.data.repository.TransactionRepository
 @Dao
 interface TransactionDao {
     @Transaction
-    @Query("SELECT * FROM transactions ORDER BY createdAt DESC")
-    fun getAllTransactionsWithCategory(): LiveData<List<TransactionWithCategory>>
+    @Query("SELECT * FROM transactions WHERE user_id = :userId ORDER BY createdAt DESC")
+    fun getAllTransactionsWithCategory(userId: String): LiveData<List<TransactionWithCategory>>
 
     @Transaction
-    @Query("SELECT * FROM transactions WHERE date = :date ORDER BY createdAt DESC")
-    fun getTransactionsByDate(date: String): LiveData<List<TransactionWithCategory>>
+    @Query("SELECT * FROM transactions WHERE user_id = :userId AND date = :date ORDER BY createdAt DESC")
+    fun getTransactionsByDate(userId: String, date: String): LiveData<List<TransactionWithCategory>>
 
     @Transaction
-    @Query("SELECT * FROM transactions WHERE type = :type ORDER BY createdAt DESC")
-    fun getTransactionsByType(type: TransactionType): LiveData<List<TransactionWithCategory>>
+    @Query("SELECT * FROM transactions WHERE user_id = :userId AND type = :type ORDER BY createdAt DESC")
+    fun getTransactionsByType(userId: String, type: TransactionType): LiveData<List<TransactionWithCategory>>
 
-    @Query("SELECT SUM(amount) FROM transactions WHERE type = :type")
-    suspend fun getTotalByType(type: TransactionType): Double?
+    @Query("SELECT SUM(amount) FROM transactions WHERE user_id = :userId AND type = :type")
+    suspend fun getTotalByType(userId: String, type: TransactionType): Double?
 
     @Query("SELECT * FROM transactions WHERE id = :id")
     suspend fun getTransactionById(id: Long): Transactions?
@@ -41,31 +41,19 @@ interface TransactionDao {
     @Query("DELETE FROM transactions WHERE id = :id")
     suspend fun deleteTransactionById(id: Long)
 
-    @Query("SELECT * FROM transactions WHERE type = :type AND date BETWEEN :startDate AND :endDate ORDER BY date ASC")
-    fun getTransactionsByDateRange(type: TransactionType, startDate: String, endDate: String): LiveData<List<Transactions>>
+    @Query("SELECT * FROM transactions WHERE user_id = :userId AND type = :type AND date BETWEEN :startDate AND :endDate ORDER BY date ASC")
+    fun getTransactionsByDateRange(userId: String, type: TransactionType, startDate: String, endDate: String): LiveData<List<Transactions>>
 
     @Query("""
         SELECT c.type_name as categoryName, SUM(t.amount) as total 
         FROM transactions t 
         INNER JOIN categories c ON t.category_id = c.id
-        WHERE t.type = :type 
+        WHERE t.user_id = :userId AND t.type = :type 
         GROUP BY t.category_id, c.type_name
         ORDER BY total DESC
     """)
-    fun getTransactionsByCategory(type: TransactionType): LiveData<List<TransactionRepository.CategoryTotal>>
+    fun getTransactionsByCategory(userId: String, type: TransactionType): LiveData<List<TransactionRepository.CategoryTotal>>
 
-    @Query("SELECT SUM(amount) FROM transactions WHERE type = :type AND date BETWEEN :startDate AND :endDate")
-    fun getMonthlyTotalByType(type: TransactionType, startDate: String, endDate: String): LiveData<Double>
-
-    // Thống kê theo tháng
-//    @Query("""
-//        SELECT DATE(date, 'start of month') as month,
-//               type,
-//               SUM(amount) as total
-//        FROM transactions
-//        WHERE date BETWEEN :startDate AND :endDate
-//        GROUP BY month, type
-//        ORDER BY month DESC
-//    """)
-//    suspend fun getMonthlyStatistics(startDate: String, endDate: String): List<MonthlyStatistic>
+    @Query("SELECT SUM(amount) FROM transactions WHERE user_id = :userId AND type = :type AND date BETWEEN :startDate AND :endDate")
+    fun getMonthlyTotalByType(userId: String, type: TransactionType, startDate: String, endDate: String): LiveData<Double>
 }

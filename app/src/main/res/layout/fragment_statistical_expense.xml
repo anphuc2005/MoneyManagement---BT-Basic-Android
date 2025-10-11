@@ -43,7 +43,7 @@
             android:orientation="horizontal"
             android:layout_marginTop="8dp">
 
-            <Spinner
+            <TextView
                 android:id="@+id/spinnerCategory"
                 android:layout_width="0dp"
                 android:layout_height="32dp"
@@ -52,19 +52,21 @@
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"/>
 
-            <Spinner
+            <TextView
                 android:id="@+id/spinnerBarMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
+                android:text="Bộ Lọc"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
                 android:layout_marginStart="8dp"/>
 
-            <Spinner
+            <TextView
                 android:id="@+id/spinnerBarYear"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
+                android:text="Năm"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -92,18 +94,20 @@
             android:gravity="end"
             android:layout_marginTop="8dp">
 
-            <Spinner
+            <TextView
                 android:id="@+id/spinnerPieMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
+                android:text="Bộ Lọc"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"/>
 
-            <Spinner
+            <TextView
                 android:id="@+id/spinnerPieYear"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
+                android:text="Năm"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"

@@ -15,12 +15,12 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index(value = ["category_id"])]
+    indices = [Index(value = ["category_id"]), Index(value = ["user_id"])]
 )
 data class Transactions(
     @PrimaryKey (autoGenerate = true)
     val id: Long = 0,
-    val user_id: Int,
+    val user_id: String,
     val category_id: Int,
     val transaction_name: String,
     val amount: Double,

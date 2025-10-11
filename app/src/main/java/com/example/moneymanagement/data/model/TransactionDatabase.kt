@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [Transactions::class, Category::class],
-    version = 1,
+    version = 2, // Tăng version lên 2
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -24,6 +25,38 @@ abstract class TransactionDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: TransactionDatabase? = null
 
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("""
+                    CREATE TABLE transactions_new (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                        user_id TEXT NOT NULL,
+                        category_id INTEGER NOT NULL,
+                        transaction_name TEXT NOT NULL,
+                        amount REAL NOT NULL,
+                        date TEXT NOT NULL,
+                        note TEXT NOT NULL,
+                        type TEXT NOT NULL,
+                        createdAt INTEGER NOT NULL,
+                        FOREIGN KEY(category_id) REFERENCES categories(id) ON DELETE CASCADE
+                    )
+                """.trimIndent())
+
+                database.execSQL("CREATE INDEX index_transactions_new_category_id ON transactions_new(category_id)")
+                database.execSQL("CREATE INDEX index_transactions_new_user_id ON transactions_new(user_id)")
+
+                database.execSQL("""
+                    INSERT INTO transactions_new (id, user_id, category_id, transaction_name, amount, date, note, type, createdAt)
+                    SELECT id, CAST(user_id AS TEXT), category_id, transaction_name, amount, date, note, type, createdAt
+                    FROM transactions
+                """.trimIndent())
+
+                database.execSQL("DROP TABLE transactions")
+
+                database.execSQL("ALTER TABLE transactions_new RENAME TO transactions")
+            }
+        }
+
         fun getDatabase(context: Context): TransactionDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -31,6 +64,7 @@ abstract class TransactionDatabase : RoomDatabase() {
                     TransactionDatabase::class.java,
                     "transaction_database"
                 )
+                    .addMigrations(MIGRATION_1_2)
                     .addCallback(DatabaseCallback(context))
                     .build()
                 INSTANCE = instance

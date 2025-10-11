@@ -5,7 +5,6 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-
 android {
     namespace = "com.example.moneymanagement"
     compileSdk = 36
@@ -50,7 +49,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.firebase.firestore)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -69,7 +68,12 @@ dependencies {
     ksp("androidx.room:room-compiler:2.5.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.3.0"))
+
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-storage-ktx")
 
     implementation("com.google.android.gms:play-services-auth:21.2.0")
 
@@ -78,4 +82,7 @@ dependencies {
     implementation("androidx.browser:browser:1.8.0")
 
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+
 }

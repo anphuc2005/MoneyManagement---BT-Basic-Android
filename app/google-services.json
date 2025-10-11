@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "235207897625",
+    "firebase_url": "https://moneymanagement-7af20-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "moneymanagement-7af20",
     "storage_bucket": "moneymanagement-7af20.firebasestorage.app"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.example.moneymanagement"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "235207897625-3gfhnldtbto6so1jlanjsgm272indre2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBGMHlRYaxs83rQblyss4nkt9g5XWWd5Zg"
@@ -20,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235207897625-3gfhnldtbto6so1jlanjsgm272indre2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

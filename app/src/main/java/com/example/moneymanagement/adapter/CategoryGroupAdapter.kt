@@ -33,7 +33,6 @@ class CategoryGroupAdapter(private val onItemClick: (CategoryListItem) -> Unit) 
         private val binding: ItemTransactionBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
 
         fun bind(item: CategoryListItem, onItemClick: (CategoryListItem) -> Unit) {
             binding.apply {
