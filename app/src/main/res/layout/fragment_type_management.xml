@@ -9,19 +9,22 @@
     <LinearLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingHorizontal="16dp"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="30dp">
+
+        <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/vector3"
             android:contentDescription="Back"
-            app:tint="?attr/colorOnSurface" />
+            android:backgroundTint="@color/bg_color"/>
 
         <TextView
             android:layout_width="0dp"

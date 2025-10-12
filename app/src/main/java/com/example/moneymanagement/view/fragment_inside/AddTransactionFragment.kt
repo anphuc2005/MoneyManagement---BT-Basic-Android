@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanagement.R
+import com.example.moneymanagement.adapter.CategoryAdapter
 import com.example.moneymanagement.adapter.CategorySelectionAdapter
 import com.example.moneymanagement.data.data_class.UserManager
 import com.example.moneymanagement.data.model.Category

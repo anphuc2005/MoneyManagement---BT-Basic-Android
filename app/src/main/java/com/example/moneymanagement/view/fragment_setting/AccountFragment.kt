@@ -1,6 +1,7 @@
 package com.example.moneymanagement.view.fragment_setting
 
 import android.Manifest
+import android.R
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.example.moneymanagement.data.data_class.UserManager
 import com.example.moneymanagement.data.data_class.UserProfile
 import com.example.moneymanagement.data.model.TransactionDatabase
@@ -47,8 +49,6 @@ class AccountFragment : Fragment() {
     private var isEditMode = false
     private var selectedImageUri: Uri? = null
     private var selectedDateOfBirth: Date? = null
-
-    // Permission launcher
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -59,7 +59,6 @@ class AccountFragment : Fragment() {
         }
     }
 
-    // Image picker launcher
     private val imagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -101,37 +100,21 @@ class AccountFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
             findNavController().popBackStack()
         }
 
-
         binding.fabEditAvatar.setOnClickListener {
-            if (isEditMode) {
-                checkPermissionAndPickImage()
-            }
+            checkPermissionAndPickImage()
         }
 
         binding.etDateOfBirth.setOnClickListener {
-            if (isEditMode) {
-                showDatePicker()
-            }
+            if (isEditMode) showDatePicker()
         }
 
         binding.tilDateOfBirth.setEndIconOnClickListener {
-            if (isEditMode) {
-                showDatePicker()
-            }
+            if (isEditMode) showDatePicker()
         }
 
-        binding.btnCancel.setOnClickListener {
-            toggleEditMode(false)
-            loadUserProfile() // Reload data
-        }
-
-        binding.btnSave.setOnClickListener {
-            saveUserProfile()
-        }
     }
 
     private fun loadUserProfile() {
@@ -142,7 +125,6 @@ class AccountFragment : Fragment() {
                     userProfile = it
                     displayUserProfile(it)
                 } ?: run {
-                    // Create default profile if not exists
                     createDefaultProfile()
                 }
             }.onFailure { error ->
@@ -161,8 +143,6 @@ class AccountFragment : Fragment() {
         binding.etDateOfBirth.setText(profile.dateOfBirth)
         binding.etDescription.setText(profile.description)
 
-        // Load avatar if exists
-        // TODO: Implement avatar loading from Firebase Storage
     }
 
     private fun createDefaultProfile() {
@@ -185,19 +165,16 @@ class AccountFragment : Fragment() {
     }
 
     private fun observeTransactionData() {
-        // Observe total income
         transactionViewModel.totalIncome.observe(viewLifecycleOwner) { income ->
             val formatted = formatCurrency(income)
             binding.tvTotalIncome.text = "+$formatted"
         }
 
-        // Observe total expense
         transactionViewModel.totalExpense.observe(viewLifecycleOwner) { expense ->
             val formatted = formatCurrency(expense)
             binding.tvTotalExpense.text = "-$formatted"
         }
 
-        // Observe balance
         transactionViewModel.balance.observe(viewLifecycleOwner) { balance ->
             val formatted = formatCurrency(balance)
             val prefix = if (balance >= 0) "+" else ""
@@ -210,20 +187,6 @@ class AccountFragment : Fragment() {
         return "${formatter.format(amount)} VNĐ"
     }
 
-    private fun toggleEditMode(enabled: Boolean) {
-        isEditMode = enabled
-
-        // Enable/disable input fields
-        binding.etFullName.isEnabled = enabled
-        binding.etDateOfBirth.isEnabled = enabled
-        binding.etDescription.isEnabled = enabled
-
-
-        // Reset selected image if cancel
-        if (!enabled) {
-            selectedImageUri = null
-        }
-    }
 
     private fun checkPermissionAndPickImage() {
         val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -255,7 +218,6 @@ class AccountFragment : Fragment() {
         val builder = MaterialDatePicker.Builder.datePicker()
         builder.setTitleText("Chọn ngày sinh")
 
-        // Set current selected date or today
         val selectedTime = selectedDateOfBirth?.time ?: System.currentTimeMillis()
         builder.setSelection(selectedTime)
 
@@ -282,45 +244,24 @@ class AccountFragment : Fragment() {
 
         binding.tilFullName.error = null
 
-        // Show loading
-        binding.btnSave.isEnabled = false
-        binding.btnSave.text = "Đang lưu..."
 
         lifecycleScope.launch {
             try {
-                // Upload avatar if selected
-                var avatarUrl: String? = null
-                if (selectedImageUri != null) {
-                    avatarUrl = uploadAvatar(selectedImageUri!!)
-                }
+                val avatarUrl = selectedImageUri?.let { uploadAvatar(it) } ?: userProfile?.avatarUrl.orEmpty()
 
-                // Update profile
                 val updates = mutableMapOf<String, Any>(
-                    "fullName" to fullName,
-                    "dateOfBirth" to dateOfBirth,
-                    "description" to description
+                    "fullName" to binding.etFullName.text.toString().trim(),
+                    "dateOfBirth" to binding.etDateOfBirth.text.toString().trim(),
+                    "description" to binding.etDescription.text.toString().trim(),
+                    "avatarUrl" to avatarUrl
                 )
 
-                avatarUrl?.let {
-                    updates["avatarUrl"] = it
-                }
-
                 val result = UserManager.updateUserProfile(updates)
-
                 result.onSuccess {
-                    Toast.makeText(
-                        requireContext(),
-                        "Cập nhật thành công",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    toggleEditMode(false)
+                    Toast.makeText(requireContext(), "Cập nhật thành công!", Toast.LENGTH_SHORT).show()
                     loadUserProfile()
-                }.onFailure { error ->
-                    Toast.makeText(
-                        requireContext(),
-                        "Lỗi: ${error.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                }.onFailure {
+                    Toast.makeText(requireContext(), "Lỗi: ${it.message}", Toast.LENGTH_SHORT).show()
                 }
 
             } catch (e: Exception) {
@@ -329,20 +270,23 @@ class AccountFragment : Fragment() {
                     "Lỗi: ${e.message}",
                     Toast.LENGTH_SHORT
                 ).show()
-            } finally {
-                binding.btnSave.isEnabled = true
-                binding.btnSave.text = "LƯU"
             }
         }
     }
 
     private suspend fun uploadAvatar(uri: Uri): String? {
         return try {
-            val userId = UserManager.getCurrentUserId() ?: return null
-            val storageRef = FirebaseStorage.getInstance().reference
-            val avatarRef = storageRef.child("avatars/$userId.jpg")
+            val userId = UserManager.getCurrentUserId() ?: run {
+                Toast.makeText(requireContext(), "Không tìm thấy userId", Toast.LENGTH_SHORT).show()
+                return null
+            }
 
-            // Compress image
+            val timestamp = System.currentTimeMillis()
+            val storageRef = FirebaseStorage.getInstance().reference
+            val avatarRef = storageRef.child("avatars/${userId}_${timestamp}.jpg")
+
+            android.util.Log.d("AccountFragment", "Upload path: avatars/${userId}_${timestamp}.jpg")
+
             val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 val source = ImageDecoder.createSource(requireContext().contentResolver, uri)
                 ImageDecoder.decodeBitmap(source)
@@ -351,19 +295,36 @@ class AccountFragment : Fragment() {
                 MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
             }
 
+            android.util.Log.d("AccountFragment", "Bitmap created: ${bitmap.width}x${bitmap.height}")
+
             val baos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
             val data = baos.toByteArray()
 
-            // Upload
-            val uploadTask = avatarRef.putBytes(data)
-            uploadTask.await()
+            android.util.Log.d("AccountFragment", "Image size: ${data.size} bytes")
 
-            // Get download URL
-            val downloadUrl = avatarRef.downloadUrl.await()
+            val metadata = com.google.firebase.storage.StorageMetadata.Builder()
+                .setContentType("image/jpeg")
+                .build()
+
+            val uploadTask = avatarRef.putBytes(data, metadata)
+            val taskSnapshot = uploadTask.await()
+
+            android.util.Log.d("AccountFragment", "Upload complete: ${taskSnapshot.metadata?.path}")
+
+            kotlinx.coroutines.delay(500)
+
+            val downloadUrl = taskSnapshot.storage.downloadUrl.await()
+            android.util.Log.d("AccountFragment", "Download URL: $downloadUrl")
             downloadUrl.toString()
 
         } catch (e: Exception) {
+            android.util.Log.e("AccountFragment", "Upload avatar error", e)
+            Toast.makeText(
+                requireContext(),
+                "Chi tiết lỗi: ${e.localizedMessage}",
+                Toast.LENGTH_LONG
+            ).show()
             null
         }
     }

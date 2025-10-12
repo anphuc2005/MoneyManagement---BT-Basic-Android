@@ -12,14 +12,14 @@
         android:layout_height="wrap_content"
         android:paddingBottom="80dp">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="16dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/bg_color"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="30dp"
             android:src="@drawable/vector3"
-            android:contentDescription="Back"
-            app:tint="@color/bg_color"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,22 +39,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/default_avatar" />
+                android:src="@drawable/ic_account" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_edit_avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/ic_camera"
+                app:fabCustomSize="10dp"
+                app:fabSize="mini"
+                app:tint="@android:color/white" />
 
         </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_edit_avatar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            app:fabCustomSize="36dp"
-            app:fabSize="mini"
-            android:src="@drawable/ic_camera"
-            app:tint="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="@id/card_avatar"
-            app:layout_constraintEnd_toEndOf="@id/card_avatar" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_summary"
@@ -65,7 +64,8 @@
             android:layout_marginEnd="24dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
-            app:cardBackgroundColor="?attr/colorPrimaryContainer"
+            app:strokeColor="@color/bg_color"
+            app:cardBackgroundColor="@color/bg_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/card_avatar">
@@ -80,15 +80,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Thu nhập"
+                        android:text="Thu nhập: "
                         android:textSize="14sp"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/tv_total_income"
@@ -105,16 +104,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:layout_marginTop="8dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Chi tiêu"
+                        android:text="Chi tiêu:    "
                         android:textSize="14sp"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/tv_total_expense"
@@ -131,16 +129,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical"
+                    android:gravity="center"
                     android:layout_marginTop="8dp">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Số dư"
+                        android:text="Số dư:      "
                         android:textSize="14sp"
-                        android:textColor="?attr/colorOnPrimaryContainer" />
+                        android:textColor="@color/white" />
 
                     <TextView
                         android:id="@+id/tv_balance"
@@ -192,7 +189,7 @@
                     android:id="@+id/et_full_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nguyễn Trần Minh Hòa"
+                    android:hint="Tên"
                     android:inputType="textPersonName"
                     android:enabled="false"
                     android:textColor="@color/white"/>
@@ -222,7 +219,7 @@
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="hoa123456987@gmail.com"
+                    android:hint="Email"
                     android:inputType="textEmailAddress"
                     android:enabled="false"
                     android:textColor="@color/white"/>
@@ -254,7 +251,7 @@
                     android:id="@+id/et_date_of_birth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="30/08/2001"
+                    android:hint="Ngày sinh"
                     android:inputType="none"
                     android:focusable="false"
                     android:clickable="true"
@@ -298,42 +295,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/layout_buttons"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="24dp"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_form">
 
-            <Button
-                android:id="@+id/btn_cancel"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="HỦY"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#F44336"
-                style="@style/Widget.Material3.Button" />
-
-            <Button
-                android:id="@+id/btn_save"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="LƯU"
-                android:textColor="@android:color/white"
-                android:backgroundTint="#4CAF50"
-                style="@style/Widget.Material3.Button" />
-
-        </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,7 +27,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.CategoryAdapter
 import com.example.moneymanagement.data.model.Category
@@ -76,13 +78,13 @@ class TypeManagementFragment : Fragment() {
         }
     }
 
-    // Image picker launcher
     private val imagePickerLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
                 selectedImageUri = uri
+                selectedIcon = "" // Clear emoji selection
                 updateImagePreview(uri)
             }
         }
@@ -137,7 +139,7 @@ class TypeManagementFragment : Fragment() {
 
     private fun setupClickListeners() {
         binding.btnBack.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
+            findNavController().popBackStack()
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -196,12 +198,15 @@ class TypeManagementFragment : Fragment() {
         val btnCancel = dialogView.findViewById<Button>(R.id.btn_cancel)
         val btnSave = dialogView.findViewById<Button>(R.id.btn_save)
 
+        // Reset selections
         selectedIcon = ""
         selectedImageUri = null
-        ivSelectedImage.visibility = View.GONE
 
         currentTvSelectedIcon = tvSelectedIcon
         currentIvSelectedImage = ivSelectedImage
+
+        ivSelectedImage?.visibility = View.GONE
+        tvSelectedIcon?.visibility = View.GONE
 
         val alertDialog = dialog.setView(dialogView).create()
         alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -275,7 +280,8 @@ class TypeManagementFragment : Fragment() {
 
         builder.setItems(emojis.toTypedArray()) { dialog, which ->
             selectedIcon = emojis[which]
-            selectedImageUri = null
+            selectedImageUri = null // Clear image selection
+
             currentTvSelectedIcon?.text = selectedIcon
             currentTvSelectedIcon?.visibility = View.VISIBLE
             currentLayoutDefaultIcon?.visibility = View.GONE
@@ -354,15 +360,25 @@ class TypeManagementFragment : Fragment() {
     private fun saveCategory(name: String, description: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val iconPath: String = if (selectedImageUri != null) {
-                    saveImageToInternalStorage(selectedImageUri!!, name) ?: run {
-                        withContext(Dispatchers.Main) {
-                            Toast.makeText(requireContext(), "Lỗi khi lưu ảnh", Toast.LENGTH_SHORT).show()
+                val iconPath: String = when {
+                    selectedImageUri != null -> {
+                        val savedPath = saveImageToInternalStorage(selectedImageUri!!, name)
+                        android.util.Log.d("TypeManagement", "Saved image to: $savedPath")
+                        savedPath ?: run {
+                            withContext(Dispatchers.Main) {
+                                Toast.makeText(requireContext(), "Lỗi khi lưu ảnh", Toast.LENGTH_SHORT).show()
+                            }
+                            return@launch
                         }
-                        return@launch
                     }
-                } else {
-                    selectedIcon
+                    selectedIcon.isNotEmpty() -> {
+                        android.util.Log.d("TypeManagement", "Using emoji: $selectedIcon")
+                        selectedIcon
+                    }
+                    else -> {
+                        android.util.Log.d("TypeManagement", "Using default emoji")
+                        "📁"
+                    }
                 }
 
                 val nextId = getNextCategoryId()
@@ -374,22 +390,18 @@ class TypeManagementFragment : Fragment() {
                     type = currentType
                 )
 
+                android.util.Log.d("TypeManagement", "Saving category: $newCategory")
                 viewModel.insertCategory(newCategory)
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Đã thêm: $name",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(requireContext(), "Đã thêm: $name", Toast.LENGTH_SHORT).show()
+                    selectedIcon = ""
+                    selectedImageUri = null
                 }
             } catch (e: Exception) {
+                android.util.Log.e("TypeManagement", "Error saving category", e)
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Lỗi: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(requireContext(), "Lỗi: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -405,22 +417,41 @@ class TypeManagementFragment : Fragment() {
                 MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
             }
 
+            if (bitmap == null) {
+                return null
+            }
+
             val directory = File(requireContext().filesDir, "category_icons")
             if (!directory.exists()) {
                 directory.mkdirs()
             }
 
-            val filename = "category_${System.currentTimeMillis()}_${categoryName.replace(" ", "_")}.jpg"
+            val timestamp = System.currentTimeMillis()
+            val sanitizedName = categoryName.replace("[^a-zA-Z0-9]".toRegex(), "_")
+            val filename = "category_${timestamp}_${sanitizedName}.jpg"
             val file = File(directory, filename)
 
+            val maxSize = 512
+            val resizedBitmap = if (bitmap.width > maxSize || bitmap.height > maxSize) {
+                val ratio = minOf(maxSize.toFloat() / bitmap.width, maxSize.toFloat() / bitmap.height)
+                val newWidth = (bitmap.width * ratio).toInt()
+                val newHeight = (bitmap.height * ratio).toInt()
+                Bitmap.createScaledBitmap(bitmap, newWidth, newHeight, true)
+            } else {
+                bitmap
+            }
+
             val outputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
+            resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 85, outputStream)
             outputStream.flush()
             outputStream.close()
 
             file.absolutePath
 
         } catch (e: IOException) {
+            e.printStackTrace()
+            null
+        } catch (e: Exception) {
             e.printStackTrace()
             null
         }
