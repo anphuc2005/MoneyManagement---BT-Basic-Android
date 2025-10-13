@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.TransactionAdapter
@@ -21,8 +20,10 @@ import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import com.example.moneymanagement.data.repository.TransactionRepository
 import com.example.moneymanagement.databinding.FragmentHomeBinding
+import com.example.moneymanagement.databinding.BottomDialogTransactionOptionsBinding
 import com.example.moneymanagement.viewmodel.TransactionViewModel
 import com.example.moneymanagement.viewmodel.TransactionViewModelFactory
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -75,15 +76,69 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        transactionAdapter = TransactionAdapter { transaction ->
-            showTransactionDetails(transaction)
-        }
+        transactionAdapter = TransactionAdapter(
+            onItemClick = { transaction ->
+                showTransactionDetails(transaction)
+            },
+            onItemLongClick = { transaction ->
+                showTransactionOptionsDialog(transaction)
+            }
+        )
 
         binding.transactionRecyclerView.apply {
             adapter = transactionAdapter
             layoutManager = LinearLayoutManager(context)
+        }
+    }
+
+    private fun showTransactionOptionsDialog(transaction: TransactionWithCategory) {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val dialogBinding = BottomDialogTransactionOptionsBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(dialogBinding.root)
+
+        dialogBinding.apply {
+            optionDelete.setOnClickListener {
+                deleteTransaction(transaction)
+                bottomSheetDialog.dismiss()
+            }
+
+            optionEdit.setOnClickListener {
+                editTransaction(transaction)
+                bottomSheetDialog.dismiss()
+            }
+
+            optionOut.setOnClickListener {
+                bottomSheetDialog.dismiss()
+            }
 
         }
+
+        bottomSheetDialog.show()
+    }
+
+    private fun deleteTransaction(transaction: TransactionWithCategory) {
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Xác nhận xóa")
+            .setMessage("Bạn có chắc chắn muốn xóa giao dịch này?")
+            .setPositiveButton("Xóa") { _, _ ->
+                lifecycleScope.launch {
+                    try {
+                        transactionViewModel.deleteTransaction(transaction.transaction)
+                        Toast.makeText(requireContext(), "Đã xóa giao dịch", Toast.LENGTH_SHORT).show()
+                    } catch (e: Exception) {
+                        Toast.makeText(requireContext(), "Lỗi khi xóa giao dịch: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Hủy", null)
+            .show()
+    }
+
+    private fun editTransaction(transaction: TransactionWithCategory) {
+        val action = HomeFragmentDirections.actionNavOverviewToEditTransactionFragment(
+            transactionId = transaction.transaction.id
+        )
+        findNavController().navigate(action)
     }
 
     private fun observeData() {
@@ -117,7 +172,6 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     private fun updateUserName() {
         val firebaseDisplayName = UserManager.getUserDisplayName()
         val firebaseEmail = UserManager.getUserEmail()
@@ -136,13 +190,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun updateChartData(transactions: List<TransactionWithCategory>) {
-//        val incomeTotal = transactions
-//            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.INCOME }
-//            .sumOf { it.transaction.amount }
-//
-//        val expenseTotal = transactions
-//            .filter { it.transaction.type == com.example.moneymanagement.data.model.TransactionType.EXPENSE }
-//            .sumOf { it.transaction.amount }
         val incomeTotal = transactionViewModel.totalIncome.value ?: 0.0
         val expenseTotal = transactionViewModel.totalExpense.value ?: 0.0
 

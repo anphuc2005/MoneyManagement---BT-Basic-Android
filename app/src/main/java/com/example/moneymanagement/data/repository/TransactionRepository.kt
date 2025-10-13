@@ -21,11 +21,11 @@ class TransactionRepository(
         return transactionDao.getAllTransactionsWithCategory(userId)
     }
 
-//    fun getTransactionsByDate(date: String): LiveData<List<TransactionWithCategory>> {
-//        return transactionDao.getTransactionsByDate(date)
-//    }
 
-    fun getTransactionsByType(userId: String, type: TransactionType): LiveData<List<TransactionWithCategory>> {
+    fun getTransactionsByType(
+        userId: String,
+        type: TransactionType
+    ): LiveData<List<TransactionWithCategory>> {
         return transactionDao.getTransactionsByType(userId, type)
     }
 
@@ -57,9 +57,6 @@ class TransactionRepository(
         return categoryDao.getAllCategories()
     }
 
-    fun getCategoriesByType(type: TransactionType): LiveData<List<Category>> {
-        return categoryDao.getCategoriesByType(type)
-    }
 
     suspend fun getCategoryById(id: Int): Category? {
         return categoryDao.getCategoryById(id)
@@ -71,11 +68,6 @@ class TransactionRepository(
         }
     }
 
-    suspend fun insertCategories(categories: List<Category>) {
-        withContext(Dispatchers.IO) {
-            categoryDao.insertCategories(categories)
-        }
-    }
 
     suspend fun deleteCategory(category: Category) {
         withContext(Dispatchers.IO) {
@@ -83,33 +75,22 @@ class TransactionRepository(
         }
     }
 
-    suspend fun getNextCategoryId(): Int {
-        return withContext(Dispatchers.IO) {
-            val allCategories = categoryDao.getAllCategories().value ?: emptyList()
-            (allCategories.maxOfOrNull { it.id } ?: 0) + 1
-        }
-    }
 
-
-    fun getTransactionsByCategory(userId: String, type: TransactionType): LiveData<List<CategoryTotal>> {
+    fun getTransactionsByCategory(
+        userId: String,
+        type: TransactionType
+    ): LiveData<List<CategoryTotal>> {
         return transactionDao.getTransactionsByCategory(userId, type)
     }
 
-//    fun getMonthlyTotalByType(type: TransactionType, year: Int, month: Int): LiveData<Double> {
-//        val startDate = String.format("%04d-%02d-01", year, month)
-//        val endDate = String.format("%04d-%02d-31", year, month)
-//        return transactionDao.getMonthlyTotalByType(type, startDate, endDate)
-//    }
+    suspend fun getTransactionById(id: Long): Transactions? {
+        return transactionDao.getTransactionById(id)
+    }
+
 
     data class CategoryTotal(
         val categoryName: String,
         val total: Double
     )
 
-
-
-    // Statistics
-//    suspend fun getMonthlyStatistics(startDate: String, endDate: String): List<MonthlyStatistic> {
-//        return transactionDao.getMonthlyStatistics(startDate, endDate)
-//    }
 }

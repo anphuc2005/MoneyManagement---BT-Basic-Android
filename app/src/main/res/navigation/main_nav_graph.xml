@@ -9,7 +9,11 @@
         android:id="@+id/nav_overview"
         android:name="com.example.moneymanagement.view.fragment_inside.HomeFragment"
         android:label="Sổ giao dịch"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_overview_to_editTransactionFragment"
+            app:destination="@id/editTransactionFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_wallet"
@@ -72,5 +76,14 @@
         android:name="com.example.moneymanagement.view.fragment_setting.AccountFragment"
         android:label="Tài khoản"
         tools:layout="@layout/fragment_account" />
+    <fragment
+        android:id="@+id/editTransactionFragment"
+        android:name="com.example.moneymanagement.view.fragment_inside.EditTransactionFragment"
+        android:label="fragment_edit_transaction"
+        tools:layout="@layout/fragment_edit_transaction" >
+        <argument
+            android:name="transactionId"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

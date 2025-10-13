@@ -93,11 +93,6 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }
     }
 
-    fun deleteTransaction(transaction: Transactions) {
-        viewModelScope.launch {
-            repository.deleteTransaction(transaction)
-        }
-    }
 
     suspend fun getTransactionSummary(): TransactionSummary {
         return _currentUserId.value?.let { userId ->
@@ -111,10 +106,6 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
 
     val allCategories = repository.getAllCategories()
 
-    fun getCategoriesByType(type: TransactionType): LiveData<List<Category>> {
-        return repository.getCategoriesByType(type)
-    }
-
     fun insertCategory(category: Category) {
         viewModelScope.launch {
             try {
@@ -126,18 +117,6 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }
     }
 
-    fun insertCategory(category: Category, onSuccess: () -> Unit, onError: (String) -> Unit) {
-        viewModelScope.launch {
-            try {
-                repository.insertCategory(category)
-                Log.d("TransactionVM", "Category inserted: $category")
-                onSuccess()
-            } catch (e: Exception) {
-                Log.e("TransactionVM", "Error inserting category: ${e.message}")
-                onError(e.message ?: "Unknown error")
-            }
-        }
-    }
 
     fun deleteCategory(category: Category) {
         viewModelScope.launch {
@@ -150,18 +129,6 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }
     }
 
-    fun deleteCategory(category: Category, onSuccess: () -> Unit, onError: (String) -> Unit) {
-        viewModelScope.launch {
-            try {
-                repository.deleteCategory(category)
-                Log.d("TransactionVM", "Category deleted: $category")
-                onSuccess()
-            } catch (e: Exception) {
-                Log.e("TransactionVM", "Error deleting category: ${e.message}")
-                onError(e.message ?: "Unknown error")
-            }
-        }
-    }
 
     fun getCategoryById(id: Int, callback: (Category?) -> Unit) {
         viewModelScope.launch {
@@ -170,13 +137,20 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }
     }
 
-    suspend fun getNextCategoryId(): Int {
-        return try {
-            val allCategories = allCategories.value ?: emptyList()
-            (allCategories.maxOfOrNull { it.id } ?: 0) + 1
-        } catch (e: Exception) {
-            Log.e("TransactionVM", "Error getting next category ID: ${e.message}")
-            1
-        }
+    suspend fun getTransactionById(id: Long): Transactions? {
+        return repository.getTransactionById(id)
     }
+
+    suspend fun getCategoryById(id: Int): Category? {
+        return repository.getCategoryById(id)
+    }
+
+    suspend fun updateTransaction(transaction: Transactions) {
+        repository.updateTransaction(transaction)
+    }
+
+    suspend fun deleteTransaction(transaction: Transactions) {
+        repository.deleteTransaction(transaction)
+    }
+
 }
