@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.moneymanagement.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,27 +79,27 @@ abstract class TransactionDatabase : RoomDatabase() {
             super.onCreate(db)
             CoroutineScope(Dispatchers.IO).launch {
                 val database = getDatabase(context)
-                populateDatabase(database.categoryDao())
+                populateDatabase(database.categoryDao(), context)
             }
         }
 
-        suspend fun populateDatabase(categoryDao: CategoryDao) {
+        suspend fun populateDatabase(categoryDao: CategoryDao, context: Context) {
             val defaultCategories = listOf(
-                Category(1, "Lương", "salary", TransactionType.INCOME),
-                Category(2, "Thưởng", "bonus", TransactionType.INCOME),
-                Category(3, "Đầu tư", "investment", TransactionType.INCOME),
-                Category(4, "Tiền khác", "other_money", TransactionType.INCOME),
-                Category(5, "Thực phẩm", "food", TransactionType.EXPENSE),
-                Category(6, "Cà phê", "coffee", TransactionType.EXPENSE),
-                Category(7, "Di chuyển", "gas", TransactionType.EXPENSE),
-                Category(8, "Thời trang", "fashion", TransactionType.EXPENSE),
-                Category(9, "Giải trí", "entertainment", TransactionType.EXPENSE),
-                Category(10, "Thú cưng", "pet", TransactionType.EXPENSE),
-                Category(11, "Giáo dục", "education", TransactionType.EXPENSE),
-                Category(12, "Y tế", "medical", TransactionType.EXPENSE),
-                Category(13, "Du lịch", "travel", TransactionType.EXPENSE),
-                Category(14, "Hoá đơn nước", "bill", TransactionType.EXPENSE),
-                Category(15, "Quà tặng", "gift", TransactionType.EXPENSE)
+                Category(1, context.getString(R.string.category_salary), "salary", TransactionType.INCOME),
+                Category(2, context.getString(R.string.category_bonus), "bonus", TransactionType.INCOME),
+                Category(3, context.getString(R.string.category_investment), "investment", TransactionType.INCOME),
+                Category(4, context.getString(R.string.category_other_money), "other_money", TransactionType.INCOME),
+                Category(5, context.getString(R.string.category_food), "food", TransactionType.EXPENSE),
+                Category(6, context.getString(R.string.category_coffee), "coffee", TransactionType.EXPENSE),
+                Category(7, context.getString(R.string.category_gas), "gas", TransactionType.EXPENSE),
+                Category(8, context.getString(R.string.category_fashion), "fashion", TransactionType.EXPENSE),
+                Category(9, context.getString(R.string.category_entertainment), "entertainment", TransactionType.EXPENSE),
+                Category(10, context.getString(R.string.category_pet), "pet", TransactionType.EXPENSE),
+                Category(11, context.getString(R.string.category_education), "education", TransactionType.EXPENSE),
+                Category(12, context.getString(R.string.category_medical), "medical", TransactionType.EXPENSE),
+                Category(13, context.getString(R.string.category_travel), "travel", TransactionType.EXPENSE),
+                Category(14, context.getString(R.string.category_bill), "bill", TransactionType.EXPENSE),
+                Category(15, context.getString(R.string.category_gift), "gift", TransactionType.EXPENSE)
             )
 
             categoryDao.insertCategories(defaultCategories)

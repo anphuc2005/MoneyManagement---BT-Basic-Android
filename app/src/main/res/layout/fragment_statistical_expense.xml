@@ -15,7 +15,7 @@
             android:id="@+id/tvLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Chi tiêu"
+            android:text="@string/tab_expense"
             android:textColor="#AAAAAA"
             android:textSize="14sp"/>
 
@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Thống kê chi tiêu theo tháng"
+            android:text="@string/expense_title"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:layout_marginTop="24dp"/>
@@ -56,7 +56,7 @@
                 android:id="@+id/spinnerBarMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:text="Bộ Lọc"
+                android:text="@string/chose_transaction_date"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -66,7 +66,7 @@
                 android:id="@+id/spinnerBarYear"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:text="Năm"
+                android:text="@string/chose_year"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
@@ -82,7 +82,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="So sánh các loại chi tiêu"
+            android:text="@string/expense_compare"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             android:layout_marginTop="24dp"/>
@@ -98,7 +98,7 @@
                 android:id="@+id/spinnerPieMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:text="Bộ Lọc"
+                android:text="@string/chose_transaction_date"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"/>
@@ -107,7 +107,7 @@
                 android:id="@+id/spinnerPieYear"
                 android:layout_width="wrap_content"
                 android:layout_height="32dp"
-                android:text="Năm"
+                android:text="@string/chose_year"
                 android:background="@drawable/spinner_bg"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"

@@ -1,5 +1,6 @@
 package com.example.moneymanagement.view.fragment_inside
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.moneymanagement.R
 import com.example.moneymanagement.databinding.FragmentSettingBinding
+import com.example.moneymanagement.view.AuthActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SettingFragment : Fragment() {
@@ -35,17 +37,14 @@ class SettingFragment : Fragment() {
     }
 
     private fun setupClickListeners() {
-        binding.btnBack.setOnClickListener {
-            requireActivity().onBackPressed()
-            findNavController().popBackStack()
-        }
 
         binding.cardLanguage.setOnClickListener {
-
+            Toast.makeText(requireContext(), R.string.language, Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_setting_to_language)
         }
 
         binding.cardCategory.setOnClickListener {
-            Toast.makeText(requireContext(), "Quản lý thẻ loại", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.type_management, Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_setting_to_typeManagement)
         }
 
@@ -54,8 +53,15 @@ class SettingFragment : Fragment() {
         }
 
         binding.cardAccount.setOnClickListener {
-            Toast.makeText(requireContext(), "Tài khoản", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), R.string.account, Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_setting_to_account)
+        }
+
+        binding.cardLogout.setOnClickListener {
+            val intent = Intent(requireActivity(), AuthActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            requireActivity().finish()
         }
     }
 

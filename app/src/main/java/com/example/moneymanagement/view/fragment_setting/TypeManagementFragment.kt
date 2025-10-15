@@ -2,7 +2,6 @@ package com.example.moneymanagement.view.fragment_setting
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -29,7 +28,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.CategoryAdapter
 import com.example.moneymanagement.data.model.Category
@@ -84,7 +82,7 @@ class TypeManagementFragment : Fragment() {
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.let { uri ->
                 selectedImageUri = uri
-                selectedIcon = "" // Clear emoji selection
+                selectedIcon = ""
                 updateImagePreview(uri)
             }
         }
@@ -113,10 +111,12 @@ class TypeManagementFragment : Fragment() {
         val factory = TransactionViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
 
-        val sharedPref = requireActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val userId = sharedPref.getString("user_id", "") ?: ""
-        if (userId.isNotEmpty()) {
+        val userId = com.example.moneymanagement.data.data_class.UserManager.getCurrentUserId()
+        if (!userId.isNullOrEmpty()) {
             viewModel.setUserId(userId)
+            android.util.Log.d("TypeManagement", "Set userId: $userId")
+        } else {
+            Toast.makeText(requireContext(), "Không thể xác định người dùng", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -198,7 +198,6 @@ class TypeManagementFragment : Fragment() {
         val btnCancel = dialogView.findViewById<Button>(R.id.btn_cancel)
         val btnSave = dialogView.findViewById<Button>(R.id.btn_save)
 
-        // Reset selections
         selectedIcon = ""
         selectedImageUri = null
 
@@ -280,7 +279,7 @@ class TypeManagementFragment : Fragment() {
 
         builder.setItems(emojis.toTypedArray()) { dialog, which ->
             selectedIcon = emojis[which]
-            selectedImageUri = null // Clear image selection
+            selectedImageUri = null
 
             currentTvSelectedIcon?.text = selectedIcon
             currentTvSelectedIcon?.visibility = View.VISIBLE
@@ -360,6 +359,14 @@ class TypeManagementFragment : Fragment() {
     private fun saveCategory(name: String, description: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
+                val userId = com.example.moneymanagement.data.data_class.UserManager.getCurrentUserId()
+                if (userId.isNullOrEmpty()) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), "Không thể xác định người dùng", Toast.LENGTH_SHORT).show()
+                    }
+                    return@launch
+                }
+
                 val iconPath: String = when {
                     selectedImageUri != null -> {
                         val savedPath = saveImageToInternalStorage(selectedImageUri!!, name)
@@ -381,20 +388,28 @@ class TypeManagementFragment : Fragment() {
                     }
                 }
 
-                val nextId = getNextCategoryId()
+                val currentCategories = viewModel.allCategories.value ?: emptyList()
+                android.util.Log.d("TypeManagement", "Current categories count: ${currentCategories.size}")
+                android.util.Log.d("TypeManagement", "Current max ID: ${currentCategories.maxOfOrNull { it.id }}")
+
+                val nextId = viewModel.getNextCategoryId()
+                android.util.Log.d("TypeManagement", "Next ID will be: $nextId")
+
 
                 val newCategory = Category(
                     id = nextId,
                     type_name = name,
                     icon = iconPath,
-                    type = currentType
+                    type = currentType,
+                    userId = userId
                 )
 
                 android.util.Log.d("TypeManagement", "Saving category: $newCategory")
+
                 viewModel.insertCategory(newCategory)
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(requireContext(), "Đã thêm: $name", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Đã thêm: $name với icon", Toast.LENGTH_SHORT).show()
                     selectedIcon = ""
                     selectedImageUri = null
                 }
@@ -406,6 +421,7 @@ class TypeManagementFragment : Fragment() {
             }
         }
     }
+
 
     private fun saveImageToInternalStorage(uri: Uri, categoryName: String): String? {
         return try {

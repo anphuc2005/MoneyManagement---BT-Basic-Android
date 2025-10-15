@@ -36,11 +36,6 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }
     }
 
-    fun getTransactionsByCategory(type: TransactionType): LiveData<List<TransactionRepository.CategoryTotal>>? {
-        return _currentUserId.value?.let { userId ->
-            repository.getTransactionsByCategory(userId, type)
-        }
-    }
 
     val totalIncome: LiveData<Double> = allTransaction.map { transactions ->
         transactions
@@ -129,14 +124,6 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
         }
     }
 
-
-    fun getCategoryById(id: Int, callback: (Category?) -> Unit) {
-        viewModelScope.launch {
-            val category = repository.getCategoryById(id)
-            callback(category)
-        }
-    }
-
     suspend fun getTransactionById(id: Long): Transactions? {
         return repository.getTransactionById(id)
     }
@@ -151,6 +138,15 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
 
     suspend fun deleteTransaction(transaction: Transactions) {
         repository.deleteTransaction(transaction)
+    }
+
+    suspend fun getNextCategoryId(): Int {
+        val userId = _currentUserId.value
+            ?: com.example.moneymanagement.data.data_class.UserManager.getCurrentUserId()
+            ?: return 1
+
+        val maxId = repository.getMaxCategoryId(userId) ?: 0
+        return maxId + 1
     }
 
 }

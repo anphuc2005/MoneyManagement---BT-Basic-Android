@@ -25,4 +25,7 @@ interface CategoryDao {
 
     @Delete
     suspend fun deleteCategory(category: Category)
+
+    @Query("SELECT MAX(id) FROM categories WHERE userId = :userId OR userId = ''")
+    suspend fun getMaxCategoryId(userId: String): Int?
 }

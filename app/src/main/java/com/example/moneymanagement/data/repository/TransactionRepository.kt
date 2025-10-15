@@ -87,6 +87,10 @@ class TransactionRepository(
         return transactionDao.getTransactionById(id)
     }
 
+    suspend fun getMaxCategoryId(userId: String): Int? {
+        return categoryDao.getMaxCategoryId(userId)
+    }
+
 
     data class CategoryTotal(
         val categoryName: String,

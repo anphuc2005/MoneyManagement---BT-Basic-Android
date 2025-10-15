@@ -35,7 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Tài khoản của tôi"
+                    android:text="@string/my_account"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Thu nhập"
+                android:text="@string/tab_income"
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
 
@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Chi tiêu"
+                android:text="@string/tab_expense"
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
 

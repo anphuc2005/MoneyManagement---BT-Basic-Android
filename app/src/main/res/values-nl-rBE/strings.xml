@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Uitgavenbeheer</string>
+
+    <!-- BottomNav -->
+    <string name="transaction">Transacties</string>
+    <string name="wallet">Portemonnee</string>
+    <string name="statistical">Statistieken</string>
+    <string name="setting">Instellingen</string>
+
+    <!-- Home_fragment -->
+    <string name="hello_label">Hallo</string>
+
+    <!-- Transaction_Item -->
+    <string name="my_wallet">Mijn Portemonnee</string>
+
+    <!-- Wallet_fragment -->
+    <string name="my_account">Mijn Account</string>
+
+    <!-- Statistical_income_fragment -->
+    <string name="income_title">Maandelijkse Inkomensstatistieken</string>
+    <string name="income_compare">Inkomenstypes Vergelijken</string>
+    <string name="chose_transaction_date">Filteren Op</string>
+    <string name="chose_year">Filteren Op Jaar</string>
+
+    <!-- Statistical_expense_fragment -->
+    <string name="expense_title">Maandelijkse Uitgavenstatistieken</string>
+    <string name="expense_compare">Uitgaventypes Vergelijken</string>
+
+    <!-- Setting -->
+    <string name="please_login">Log alstublieft in</string>
+    <string name="cannot_get_user_info">Kan gebruikersinformatie niet ophalen</string>
+    <string name="please_enter_transaction_name">Voer alstublieft transactienaam in</string>
+    <string name="please_enter_amount">Voer alstublieft bedrag in</string>
+    <string name="amount_must_be_greater_than_zero">Bedrag moet groter zijn dan 0</string>
+    <string name="invalid_amount">Ongeldig bedrag</string>
+    <string name="transaction_added">Transactie succesvol toegevoegd</string>
+    <string name="transaction_deleted">Transactie verwijderd</string>
+    <string name="error_deleting_transaction">Fout bij verwijderen transactie: %s</string>
+    <string name="category_added">Toegevoegd: %s</string>
+    <string name="category_deleted">%s verwijderd</string>
+    <string name="error_saving_image">Fout bij opslaan afbeelding</string>
+    <string name="cannot_identify_user">Kan gebruiker niet identificeren</string>
+    <string name="please_enter_category_name">Voer alstublieft categorienaam in</string>
+    <string name="please_select_icon">Selecteer alstublieft pictogram</string>
+    <string name="loading_categories">Categorieën laden...</string>
+    <string name="cannot_load_image">Kan afbeelding niet laden: %s</string>
+    <string name="language">Taal</string>
+    <string name="type_management">Categoriebeheer</string>
+    <string name="layout_management">Systeemindeling</string>
+    <string name="account">Account</string>
+    <string name="logout">Uitloggen</string>
+
+    <!-- Add_fragment -->
+    <string name="add_fragment">Nieuwe Transactie</string>
+    <string name="chose_group">Kies Transactiegroep</string>
+    <string name="name_transaction">Transactienaam</string>
+    <string name="amount_transaction">Transactiebedrag</string>
+    <string name="date_transaction">Transactiedatum</string>
+    <string name="note_transaction">Notitie</string>
+
+    <!-- Permissions -->
+    <string name="permission_needed">Toestemming Vereist</string>
+    <string name="permission_rationale">De app heeft toegang nodig tot uw fotobibliotheek om u pictogrammen voor categorieën te laten kiezen.</string>
+    <string name="allow">Toestaan</string>
+    <string name="permission_denied">Toestemming Geweigerd</string>
+    <string name="permission_denied_message">U heeft toegang tot de fotobibliotheek geweigerd. Ga naar Instellingen om deze toestemming in te schakelen.</string>
+    <string name="open_settings">Instellingen Openen</string>
+
+    <!-- Confirmation -->
+    <string name="confirm_delete">Verwijdering Bevestigen</string>
+    <string name="confirm_delete_transaction">Weet u zeker dat u deze transactie wilt verwijderen?</string>
+    <string name="save">Opslaan</string>
+    <string name="cancel">Annuleren</string>
+    <string name="update">Bijwerken</string>
+
+    <!-- Days of week -->
+    <string name="monday">Maandag</string>
+    <string name="tuesday">Dinsdag</string>
+    <string name="wednesday">Woensdag</string>
+    <string name="thursday">Donderdag</string>
+    <string name="friday">Vrijdag</string>
+    <string name="saturday">Zaterdag</string>
+    <string name="sunday">Zondag</string>
+
+    <!-- Category Names -->
+    <string name="category_salary">Salaris</string>
+    <string name="category_bonus">Bonus</string>
+    <string name="category_investment">Investering</string>
+    <string name="category_other_money">Ander Geld</string>
+    <string name="category_food">Voedsel</string>
+    <string name="category_coffee">Koffie</string>
+    <string name="category_gas">Transport</string>
+    <string name="category_fashion">Mode</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_pet">Huisdier</string>
+    <string name="category_education">Onderwijs</string>
+    <string name="category_medical">Medisch</string>
+    <string name="category_travel">Reis</string>
+    <string name="category_bill">Waterrekening</string>
+    <string name="category_gift">Cadeau</string>
+
+    <!-- Tab titles -->
+    <string name="tab_expense">Uitgaven</string>
+    <string name="tab_income">Inkomsten</string>
+
+    <!-- Empty states -->
+    <string name="no_categories">Nog geen categorieën</string>
+    <string name="add_first_category">Voeg uw eerste categorie toe</string>
+</resources>

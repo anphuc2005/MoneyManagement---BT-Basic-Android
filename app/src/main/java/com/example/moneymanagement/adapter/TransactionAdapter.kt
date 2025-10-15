@@ -8,10 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.moneymanagement.R
 import com.example.moneymanagement.data.data_class.TransactionListItem
 import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.model.TransactionWithCategory
+import java.io.File
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -102,13 +104,10 @@ class TransactionAdapter(
             onItemClick: (TransactionWithCategory) -> Unit,
             onItemLongClick: (TransactionWithCategory) -> Unit
         ) {
-            // Set transaction title
             transactionTitle.text = transaction.transaction.transaction_name
 
-            // Set category name
             transactionCategory.text = transaction.category?.type_name ?: "Không xác định"
 
-            // Format and set amount
             val formatter = NumberFormat.getNumberInstance(Locale("vi", "VN"))
             val formattedAmount = formatter.format(transaction.transaction.amount)
 
@@ -138,77 +137,47 @@ class TransactionAdapter(
         }
 
         private fun setIconForCategory(iconName: String?) {
-            // Hide emoji, show icon by default
             transactionEmoji.visibility = View.GONE
-            transactionIcon.visibility = View.VISIBLE
+            transactionIcon.visibility = View.GONE
 
-            when (iconName) {
-                "salary" -> transactionIcon.setImageResource(R.drawable.salary)
-                "bonus" -> transactionIcon.setImageResource(R.drawable.salary)
-                "investment" -> transactionIcon.setImageResource(R.drawable.salary)
-                "food" -> {
-                    // You can use emoji for food
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "🍕"
+            if (iconName.isNullOrEmpty()) {
+                transactionEmoji.visibility = View.VISIBLE
+                transactionEmoji.text = "💰"
+                return
+            }
+
+            when {
+                iconName.startsWith("/") -> {
+                    val file = File(iconName)
+                    if (file.exists()) {
+                        transactionIcon.visibility = View.VISIBLE
+                        Glide.with(itemView.context)
+                            .load(file)
+                            .centerCrop()
+                            .placeholder(R.drawable.salary)
+                            .error(R.drawable.salary)
+                            .into(transactionIcon)
+                    } else {
+                        transactionEmoji.visibility = View.VISIBLE
+                        transactionEmoji.text = "📁"
+                    }
                 }
-                "coffee" -> {
-                    transactionIcon.visibility = View.GONE
+
+                iconName.length <= 4 && iconName.any { it.code > 127 } -> {
                     transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "☕"
+                    transactionEmoji.text = iconName
                 }
-                "gas" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "⛽"
-                }
-                "fashion" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "👕"
-                }
-                "entertainment" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "🎮"
-                }
-                "pet" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "🐕"
-                }
-                "education" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "📚"
-                }
-                "medical" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "🏥"
-                }
-                "travel" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "✈️"
-                }
-                "bill" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "💡"
-                }
-                "gift" -> {
-                    transactionIcon.visibility = View.GONE
-                    transactionEmoji.visibility = View.VISIBLE
-                    transactionEmoji.text = "🎁"
-                }
+
                 else -> {
-                    // Default icon
-                    try {
-                        transactionIcon.setImageResource(R.drawable.salary)
-                    } catch (e: Exception) {
-                        // If salary drawable doesn't exist, use emoji
-                        transactionIcon.visibility = View.GONE
+                    val iconRes = itemView.context.resources.getIdentifier(
+                        iconName,
+                        "drawable",
+                        itemView.context.packageName
+                    )
+                    if (iconRes != 0) {
+                        transactionIcon.visibility = View.VISIBLE
+                        transactionIcon.setImageResource(iconRes)
+                    } else {
                         transactionEmoji.visibility = View.VISIBLE
                         transactionEmoji.text = "💰"
                     }

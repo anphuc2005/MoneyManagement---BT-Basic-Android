@@ -32,7 +32,7 @@
                 android:id="@+id/greeting_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hi,"
+                android:text="@string/hello_label"
                 android:textColor="#B0BEC5"
                 android:textSize="14sp" />
 
@@ -91,7 +91,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Thu nhập"
+                        android:text="@string/tab_income"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 
@@ -112,7 +112,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chi tiêu"
+                        android:text="@string/tab_expense"
                         android:textColor="#FFFFFF"
                         android:textSize="12sp" />
 
