@@ -17,6 +17,7 @@ import com.example.moneymanagement.R
 import com.example.moneymanagement.databinding.FragmentSettingBinding
 import com.example.moneymanagement.view.AuthActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.auth.FirebaseAuth
 
 class SettingFragment : Fragment() {
 
@@ -58,7 +59,8 @@ class SettingFragment : Fragment() {
         }
 
         binding.cardLogout.setOnClickListener {
-            val intent = Intent(requireActivity(), AuthActivity::class.java)
+            FirebaseAuth.getInstance().signOut()
+            val intent = Intent(requireContext(), AuthActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             requireActivity().finish()
