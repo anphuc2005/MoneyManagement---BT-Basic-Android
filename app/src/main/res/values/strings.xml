@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Quản Lý Chi Tiêu</string>
+    <string name="hello_blank_fragment" tools:ignore="MissingTranslation">Hello Blank Fragment</string>
+
+    <!-- BottomNav -->
+    <string name="transaction">Sổ giao dịch</string>
+    <string name="wallet">Ví tiền</string>
+    <string name="statistical">Thống kê</string>
+    <string name="setting">Cài đặt</string>
+
+    <!-- Home_fragment -->
+    <string name="hello_label">Xin chào</string>
+
+
+    <!-- Transaction_Item -->
+    <string name="my_wallet">Ví của tôi</string>
+
+    <!-- Wallet_fragment -->
+    <string name="my_account">Tài khoản của tôi</string>
+
+
+    <!-- Statistical_income_fragment -->
+    <string name="income_title">Thống kê thu nhập theo tháng</string>
+    <string name="income_compare">So sánh các loại thu nhập</string>
+    <string name="chose_transaction_date">Chọn bộ lọc theo</string>
+    <string name="chose_year">Chọn theo năm</string>
+
+    <!-- Statistical_expense_fragment -->
+    <string name="expense_title">Thống kê thu nhập theo tháng</string>
+    <string name="expense_compare">So sánh các loại thu nhập</string>
+
+    <!-- Setting -->
+    <string name="please_login">Vui lòng đăng nhập</string>
+    <string name="cannot_get_user_info">Không thể lấy thông tin user</string>
+    <string name="please_enter_transaction_name">Vui lòng nhập tên giao dịch</string>
+    <string name="please_enter_amount">Vui lòng nhập số tiền</string>
+    <string name="amount_must_be_greater_than_zero">Số tiền phải lớn hơn 0</string>
+    <string name="invalid_amount">Số tiền không hợp lệ</string>
+    <string name="transaction_added">Đã thêm giao dịch thành công</string>
+    <string name="transaction_deleted">Đã xóa giao dịch</string>
+    <string name="error_deleting_transaction">Lỗi khi xóa giao dịch: %s</string>
+    <string name="category_added">Đã thêm: %s</string>
+    <string name="category_deleted">Đã xóa %s</string>
+    <string name="error_saving_image">Lỗi khi lưu ảnh</string>
+    <string name="cannot_identify_user">Không thể xác định người dùng</string>
+    <string name="please_enter_category_name">Vui lòng nhập tên nhóm phân loại</string>
+    <string name="please_select_icon">Vui lòng chọn icon</string>
+    <string name="loading_categories">Đang tải danh mục...</string>
+    <string name="cannot_load_image">Không thể tải ảnh: %s</string>
+    <string name="language">Ngôn ngữ</string>
+    <string name="type_management">Quản lý thể loại</string>
+    <string name="layout_management">Giao diện hệ thống</string>
+    <string name="account">Tài khoản</string>
+    <string name="logout">Đăng xuất</string>
+
+    <!-- Add_fragment -->
+    <string name="add_fragment">Giao dịch mới</string>
+    <string name="chose_group">Chọn nhóm giao dịch</string>
+    <string name="name_transaction">Tên giao dịch</string>
+    <string name="amount_transaction">Số tiền giao dịch</string>
+    <string name="date_transaction">Ngày giao dịch</string>
+    <string name="note_transaction">Ghi chú</string>
+
+    <!-- Permissions -->
+    <string name="permission_needed">Cần quyền truy cập</string>
+    <string name="permission_rationale">Ứng dụng cần quyền truy cập thư viện ảnh để bạn có thể chọn icon cho nhóm phân loại.</string>
+    <string name="allow">Cho phép</string>
+    <string name="permission_denied">Quyền bị từ chối</string>
+    <string name="permission_denied_message">Bạn đã từ chối quyền truy cập thư viện ảnh. Vui lòng vào Cài đặt để bật quyền này.</string>
+    <string name="open_settings">Mở Cài đặt</string>
+
+    <!-- Confirmation -->
+    <string name="confirm_delete">Xác nhận xóa</string>
+    <string name="confirm_delete_transaction">Bạn có chắc chắn muốn xóa giao dịch này?</string>
+    <string name="save">Lưu</string>
+    <string name="cancel">Hủy</string>
+    <string name="update">Cập nhật</string>
+
+    <!-- Days of week -->
+    <string name="monday">Thứ Hai</string>
+    <string name="tuesday">Thứ Ba</string>
+    <string name="wednesday">Thứ Tư</string>
+    <string name="thursday">Thứ Năm</string>
+    <string name="friday">Thứ Sáu</string>
+    <string name="saturday">Thứ Bảy</string>
+    <string name="sunday">Chủ Nhật</string>
+
+    <!-- Category Names -->
+    <string name="category_salary">Lương</string>
+    <string name="category_bonus">Thưởng</string>
+    <string name="category_investment">Đầu tư</string>
+    <string name="category_other_money">Tiền khác</string>
+    <string name="category_food">Thực phẩm</string>
+    <string name="category_coffee">Cà phê</string>
+    <string name="category_gas">Di chuyển</string>
+    <string name="category_fashion">Thời trang</string>
+    <string name="category_entertainment">Giải trí</string>
+    <string name="category_pet">Thú cưng</string>
+    <string name="category_education">Giáo dục</string>
+    <string name="category_medical">Y tế</string>
+    <string name="category_travel">Du lịch</string>
+    <string name="category_bill">Hoá đơn nước</string>
+    <string name="category_gift">Quà tặng</string>
+
+    <!-- Tab titles -->
+    <string name="tab_expense">Chi tiêu</string>
+    <string name="tab_income">Thu nhập</string>
+
+    <!-- Empty states -->
+    <string name="no_categories">Chưa có danh mục nào</string>
+    <string name="add_first_category">Thêm danh mục đầu tiên của bạn</string>
+</resources>

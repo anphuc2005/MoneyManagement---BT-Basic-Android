@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gestion des Dépenses</string>
+
+    <!-- BottomNav -->
+    <string name="transaction">Transactions</string>
+    <string name="wallet">Portefeuille</string>
+    <string name="statistical">Statistiques</string>
+    <string name="setting">Paramètres</string>
+
+    <!-- Home_fragment -->
+    <string name="hello_label">Bonjour</string>
+
+    <!-- Transaction_Item -->
+    <string name="my_wallet">Mon Portefeuille</string>
+
+    <!-- Wallet_fragment -->
+    <string name="my_account">Mon Compte</string>
+
+    <!-- Statistical_income_fragment -->
+    <string name="income_title">Statistiques de Revenus Mensuels</string>
+    <string name="income_compare">Comparer les Types de Revenus</string>
+    <string name="chose_transaction_date">Filtrer Par</string>
+    <string name="chose_year">Filtrer Par Année</string>
+
+    <!-- Statistical_expense_fragment -->
+    <string name="expense_title">Statistiques de Dépenses Mensuelles</string>
+    <string name="expense_compare">Comparer les Types de Dépenses</string>
+
+    <!-- Setting -->
+    <string name="please_login">Veuillez vous connecter</string>
+    <string name="cannot_get_user_info">Impossible d\'obtenir les informations utilisateur</string>
+    <string name="please_enter_transaction_name">Veuillez saisir le nom de la transaction</string>
+    <string name="please_enter_amount">Veuillez saisir le montant</string>
+    <string name="amount_must_be_greater_than_zero">Le montant doit être supérieur à 0</string>
+    <string name="invalid_amount">Montant invalide</string>
+    <string name="transaction_added">Transaction ajoutée avec succès</string>
+    <string name="transaction_deleted">Transaction supprimée</string>
+    <string name="error_deleting_transaction">Erreur lors de la suppression de la transaction: %s</string>
+    <string name="category_added">Ajouté: %s</string>
+    <string name="category_deleted">Supprimé %s</string>
+    <string name="error_saving_image">Erreur lors de l\'enregistrement de l\'image</string>
+    <string name="cannot_identify_user">Impossible d\'identifier l\'utilisateur</string>
+    <string name="please_enter_category_name">Veuillez saisir le nom de la catégorie</string>
+    <string name="please_select_icon">Veuillez sélectionner une icône</string>
+    <string name="loading_categories">Chargement des catégories...</string>
+    <string name="cannot_load_image">Impossible de charger l\'image: %s</string>
+    <string name="language">Langue</string>
+    <string name="type_management">Gestion des Catégories</string>
+    <string name="layout_management">Mise en Page du Système</string>
+    <string name="account">Compte</string>
+    <string name="logout">Déconnexion</string>
+
+    <!-- Add_fragment -->
+    <string name="add_fragment">Nouvelle Transaction</string>
+    <string name="chose_group">Choisir un Groupe de Transaction</string>
+    <string name="name_transaction">Nom de la Transaction</string>
+    <string name="amount_transaction">Montant de la Transaction</string>
+    <string name="date_transaction">Date de la Transaction</string>
+    <string name="note_transaction">Note</string>
+
+    <!-- Permissions -->
+    <string name="permission_needed">Permission Nécessaire</string>
+    <string name="permission_rationale">L\'application a besoin d\'accéder à votre bibliothèque de photos pour vous permettre de choisir des icônes pour les catégories.</string>
+    <string name="allow">Autoriser</string>
+    <string name="permission_denied">Permission Refusée</string>
+    <string name="permission_denied_message">Vous avez refusé l\'accès à la bibliothèque de photos. Veuillez aller dans Paramètres pour activer cette permission.</string>
+    <string name="open_settings">Ouvrir les Paramètres</string>
+
+    <!-- Confirmation -->
+    <string name="confirm_delete">Confirmer la Suppression</string>
+    <string name="confirm_delete_transaction">Êtes-vous sûr de vouloir supprimer cette transaction?</string>
+    <string name="save">Enregistrer</string>
+    <string name="cancel">Annuler</string>
+    <string name="update">Mettre à Jour</string>
+
+    <!-- Days of week -->
+    <string name="monday">Lundi</string>
+    <string name="tuesday">Mardi</string>
+    <string name="wednesday">Mercredi</string>
+    <string name="thursday">Jeudi</string>
+    <string name="friday">Vendredi</string>
+    <string name="saturday">Samedi</string>
+    <string name="sunday">Dimanche</string>
+
+    <!-- Category Names -->
+    <string name="category_salary">Salaire</string>
+    <string name="category_bonus">Prime</string>
+    <string name="category_investment">Investissement</string>
+    <string name="category_other_money">Autre Argent</string>
+    <string name="category_food">Nourriture</string>
+    <string name="category_coffee">Café</string>
+    <string name="category_gas">Transport</string>
+    <string name="category_fashion">Mode</string>
+    <string name="category_entertainment">Divertissement</string>
+    <string name="category_pet">Animal de Compagnie</string>
+    <string name="category_education">Éducation</string>
+    <string name="category_medical">Médical</string>
+    <string name="category_travel">Voyage</string>
+    <string name="category_bill">Facture d\'Eau</string>
+    <string name="category_gift">Cadeau</string>
+
+    <!-- Tab titles -->
+    <string name="tab_expense">Dépense</string>
+    <string name="tab_income">Revenu</string>
+
+    <!-- Empty states -->
+    <string name="no_categories">Pas encore de catégories</string>
+    <string name="add_first_category">Ajoutez votre première catégorie</string>
+</resources>
