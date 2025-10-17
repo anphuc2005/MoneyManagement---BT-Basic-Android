@@ -107,9 +107,6 @@ class HomeFragment : Fragment() {
                 bottomSheetDialog.dismiss()
             }
 
-            optionOut.setOnClickListener {
-                bottomSheetDialog.dismiss()
-            }
 
         }
 
@@ -186,6 +183,10 @@ class HomeFragment : Fragment() {
 
         binding.userName.text = displayName
 
+        if (firebaseDisplayName != null && firebaseDisplayName != storedName) {
+            sharedPref.edit().putString("user_name", firebaseDisplayName).apply()
+        }
+
         Log.d("HomeFragment", "Display name: $displayName")
     }
 
@@ -195,7 +196,6 @@ class HomeFragment : Fragment() {
 
         Log.d("HomeFragment", "Income: $incomeTotal, Expense: $expenseTotal")
 
-        // Setup LineChart với dữ liệu thực
         LineChartHelper.setupLineChart(binding.chartContainer, transactions)
     }
 

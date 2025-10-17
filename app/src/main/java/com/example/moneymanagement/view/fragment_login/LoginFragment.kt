@@ -1,5 +1,6 @@
 package com.example.moneymanagement.view.fragment_login
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -47,6 +48,10 @@ class LoginFragment : Fragment() {
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding.forgotPassword.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
+        }
     }
 
     private fun loginUser() {
@@ -70,6 +75,21 @@ class LoginFragment : Fragment() {
                     Toast.makeText(requireContext(), "Login failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
                 }
             }
+    }
+
+    private fun saveLoginStatus() {
+        val currentUser = auth.currentUser
+        val sharedPref = requireActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+
+        sharedPref.edit().apply(){
+            putBoolean("is_logged_in", true)
+            putString("user_id", currentUser?.uid)
+            putString("user_email", currentUser?.email)
+
+            val displayName = currentUser?.displayName?: currentUser?.email?.substringBefore("@")?: "User"
+            putString("user_name", displayName)
+            apply()
+        }
     }
 
     override fun onDestroyView() {

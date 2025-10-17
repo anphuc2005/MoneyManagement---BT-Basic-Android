@@ -1,5 +1,6 @@
 package com.example.moneymanagement.view.fragment_inside
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -60,6 +61,10 @@ class SettingFragment : Fragment() {
 
         binding.cardLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
+
+            val sharedPref = requireActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            sharedPref.edit().clear().apply()
+
             val intent = Intent(requireContext(), AuthActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
