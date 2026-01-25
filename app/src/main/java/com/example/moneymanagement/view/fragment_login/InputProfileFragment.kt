@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.moneymanagement.R
-import com.example.moneymanagement.data.data_class.UserManager
+import com.example.moneymanagement.utils.UserManager
 import com.example.moneymanagement.data.data_class.UserProfile
 import com.example.moneymanagement.databinding.FragmentInputProfileBinding
 import com.google.android.material.datepicker.MaterialDatePicker

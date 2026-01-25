@@ -1,5 +1,6 @@
 package com.example.moneymanagement.view.fragment_inside
 
+import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,20 +8,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneymanagement.MyApp
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.TransactionAdapter
-import com.example.moneymanagement.data.data_class.LineChartHelper
-import com.example.moneymanagement.data.data_class.TransactionGroupHelper
-import com.example.moneymanagement.data.data_class.UserManager
+import com.example.moneymanagement.utils.LineChartHelper
+import com.example.moneymanagement.utils.TransactionGroupHelper
+import com.example.moneymanagement.utils.UserManager
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import com.example.moneymanagement.data.repository.TransactionRepository
 import com.example.moneymanagement.databinding.FragmentHomeBinding
 import com.example.moneymanagement.databinding.BottomDialogTransactionOptionsBinding
+import com.example.moneymanagement.utils.chart.FinancialChartView
 import com.example.moneymanagement.viewmodel.TransactionViewModel
 import com.example.moneymanagement.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,7 +34,13 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+//    private val app: MyApp by lazy { requireActivity().application as MyApp }
+//
+//    private val transactionViewModel: TransactionViewModel by activityViewModels {
+//        TransactionViewModelFactory(app.repository)
+//    }
     private lateinit var transactionViewModel: TransactionViewModel
+
     private lateinit var transactionAdapter: TransactionAdapter
 
     private var currentUserId: String? = null
@@ -64,9 +74,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val database = TransactionDatabase.getDatabase(requireContext())
-        val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
-        val factory = TransactionViewModelFactory(repository)
+        val app: MyApp = requireActivity().application as MyApp
+        val factory = TransactionViewModelFactory(app.repository)
         transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
 
         currentUserId?.let { userId ->
@@ -196,7 +205,8 @@ class HomeFragment : Fragment() {
 
         Log.d("HomeFragment", "Income: $incomeTotal, Expense: $expenseTotal")
 
-        LineChartHelper.setupLineChart(binding.chartContainer, transactions)
+//        LineChartHelper.setupLineChart(binding.chartContainer, transactions)
+        binding.chartCard.setupChart(transactions)
     }
 
     private fun updateSummaryUI(summary: com.example.moneymanagement.data.model.TransactionSummary) {

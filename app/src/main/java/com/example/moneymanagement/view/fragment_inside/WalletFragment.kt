@@ -12,11 +12,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.moneymanagement.MyApp
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.CategoryGroupAdapter
-import com.example.moneymanagement.data.data_class.CategoryGroupHelper
+import com.example.moneymanagement.utils.CategoryGroupHelper
 import com.example.moneymanagement.data.data_class.CategoryListItem
-import com.example.moneymanagement.data.data_class.UserManager
+import com.example.moneymanagement.utils.UserManager
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.model.TransactionWithCategory
@@ -84,9 +85,8 @@ class WalletFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val database = TransactionDatabase.getDatabase(requireContext())
-        val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
-        val factory = TransactionViewModelFactory(repository)
+        val app: MyApp = requireActivity().application as MyApp
+        val factory = TransactionViewModelFactory(app.repository)
         transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
         currentUserId?.let { userId ->
             transactionViewModel.setUserId(userId)

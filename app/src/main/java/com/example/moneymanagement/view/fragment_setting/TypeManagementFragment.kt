@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.moneymanagement.MyApp
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.CategoryAdapter
 import com.example.moneymanagement.data.model.Category
@@ -35,6 +36,7 @@ import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.repository.TransactionRepository
 import com.example.moneymanagement.databinding.FragmentTypeManagementBinding
+import com.example.moneymanagement.utils.UserManager
 import com.example.moneymanagement.viewmodel.TransactionViewModel
 import com.example.moneymanagement.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -106,12 +108,11 @@ class TypeManagementFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val database = TransactionDatabase.getDatabase(requireContext())
-        val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
-        val factory = TransactionViewModelFactory(repository)
+        val app: MyApp = requireActivity() as MyApp
+        val factory = TransactionViewModelFactory(app.repository)
         viewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
 
-        val userId = com.example.moneymanagement.data.data_class.UserManager.getCurrentUserId()
+        val userId = UserManager.getCurrentUserId()
         if (!userId.isNullOrEmpty()) {
             viewModel.setUserId(userId)
             android.util.Log.d("TypeManagement", "Set userId: $userId")
@@ -359,7 +360,7 @@ class TypeManagementFragment : Fragment() {
     private fun saveCategory(name: String, description: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val userId = com.example.moneymanagement.data.data_class.UserManager.getCurrentUserId()
+                val userId = UserManager.getCurrentUserId()
                 if (userId.isNullOrEmpty()) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Không thể xác định người dùng", Toast.LENGTH_SHORT).show()

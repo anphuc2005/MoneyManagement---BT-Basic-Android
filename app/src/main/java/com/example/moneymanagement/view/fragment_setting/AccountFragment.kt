@@ -22,7 +22,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.example.moneymanagement.data.data_class.UserManager
+import com.example.moneymanagement.MyApp
+import com.example.moneymanagement.utils.UserManager
 import com.example.moneymanagement.data.data_class.UserProfile
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.repository.TransactionRepository
@@ -88,9 +89,8 @@ class AccountFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val database = TransactionDatabase.getDatabase(requireContext())
-        val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
-        val factory = TransactionViewModelFactory(repository)
+        val app: MyApp = requireActivity() as MyApp
+        val factory = TransactionViewModelFactory(app.repository)
         transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
 
         UserManager.getCurrentUserId()?.let { userId ->

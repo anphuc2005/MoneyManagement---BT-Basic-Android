@@ -1,5 +1,6 @@
-package com.example.moneymanagement.data.data_class
+package com.example.moneymanagement.utils
 
+import com.example.moneymanagement.data.data_class.CategoryListItem
 import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.model.TransactionWithCategory
 

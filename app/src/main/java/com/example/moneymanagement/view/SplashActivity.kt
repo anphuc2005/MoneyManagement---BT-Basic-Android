@@ -14,7 +14,6 @@ class SplashActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
 
-        // Kiểm tra từ Firebase Auth trước
         val currentUser = auth.currentUser
 
         if (currentUser != null) {

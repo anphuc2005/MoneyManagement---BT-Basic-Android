@@ -14,9 +14,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.moneymanagement.MyApp
 import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.StatisticalChoiceAdapter
-import com.example.moneymanagement.data.data_class.UserManager
+import com.example.moneymanagement.utils.UserManager
 import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.repository.TransactionRepository
@@ -67,9 +68,8 @@ class StatisticalExpenseFragment : Fragment() {
     }
 
     private fun setupViewModel() {
-        val database = TransactionDatabase.getDatabase(requireContext())
-        val repository = TransactionRepository(database.transactionDao(), database.categoryDao())
-        val factory = TransactionViewModelFactory(repository)
+        val app: MyApp = requireActivity().application as MyApp
+        val factory = TransactionViewModelFactory(app.repository)
         transactionViewModel = ViewModelProvider(this, factory)[TransactionViewModel::class.java]
         UserManager.getCurrentUserId()?.let { userId ->
             transactionViewModel.setUserId(userId)

@@ -13,6 +13,7 @@ import com.example.moneymanagement.data.model.TransactionType
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import com.example.moneymanagement.data.model.Transactions
 import com.example.moneymanagement.data.repository.TransactionRepository
+import com.example.moneymanagement.utils.UserManager
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -142,7 +143,7 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
 
     suspend fun getNextCategoryId(): Int {
         val userId = _currentUserId.value
-            ?: com.example.moneymanagement.data.data_class.UserManager.getCurrentUserId()
+            ?: UserManager.getCurrentUserId()
             ?: return 1
 
         val maxId = repository.getMaxCategoryId(userId) ?: 0

@@ -1,7 +1,9 @@
-package com.example.moneymanagement.data.data_class
+package com.example.moneymanagement.utils
+
+import com.example.moneymanagement.data.data_class.TransactionListItem
 import com.example.moneymanagement.data.model.TransactionWithCategory
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object TransactionGroupHelper {
 
