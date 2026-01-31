@@ -1,0 +1,37 @@
+<resources>
+    <!-- Bottom Sheet Dialog Theme -->
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">#263238</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <!-- Alert Dialog Dark Theme -->
+    <style name="AlertDialogDarkTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:background">#263238</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="colorAccent">#2196F3</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">#B0BEC5</item>
+    </style>
+
+    <!-- Custom DatePicker Theme -->
+    <style name="CustomDatePickerTheme" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="android:windowBackground">@color/bg_color</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:textColorSecondary">#B0BEC5</item>
+        <item name="colorAccent">#2196F3</item>
+        <item name="colorPrimary">#2196F3</item>
+        <item name="android:colorControlActivated">#2196F3</item>
+    </style>
+</resources>

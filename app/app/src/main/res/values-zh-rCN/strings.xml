@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">支出管理</string>
+
+    <!-- BottomNav -->
+    <string name="transaction">交易记录</string>
+    <string name="wallet">钱包</string>
+    <string name="statistical">统计</string>
+    <string name="setting">设置</string>
+
+    <!-- Home_fragment -->
+    <string name="hello_label">你好</string>
+
+    <!-- Transaction_Item -->
+    <string name="my_wallet">我的钱包</string>
+
+    <!-- Wallet_fragment -->
+    <string name="my_account">我的账户</string>
+
+    <!-- Statistical_income_fragment -->
+    <string name="income_title">月度收入统计</string>
+    <string name="income_compare">比较收入类型</string>
+    <string name="chose_transaction_date">筛选条件</string>
+    <string name="chose_year">按年份筛选</string>
+
+    <!-- Statistical_expense_fragment -->
+    <string name="expense_title">月度支出统计</string>
+    <string name="expense_compare">比较支出类型</string>
+
+    <!-- Setting -->
+    <string name="please_login">请登录</string>
+    <string name="cannot_get_user_info">无法获取用户信息</string>
+    <string name="please_enter_transaction_name">请输入交易名称</string>
+    <string name="please_enter_amount">请输入金额</string>
+    <string name="amount_must_be_greater_than_zero">金额必须大于0</string>
+    <string name="invalid_amount">无效金额</string>
+    <string name="transaction_added">交易添加成功</string>
+    <string name="transaction_deleted">交易已删除</string>
+    <string name="error_deleting_transaction">删除交易时出错：%s</string>
+    <string name="category_added">已添加：%s</string>
+    <string name="category_deleted">已删除 %s</string>
+    <string name="error_saving_image">保存图片时出错</string>
+    <string name="cannot_identify_user">无法识别用户</string>
+    <string name="please_enter_category_name">请输入类别名称</string>
+    <string name="please_select_icon">请选择图标</string>
+    <string name="loading_categories">正在加载类别...</string>
+    <string name="cannot_load_image">无法加载图片：%s</string>
+    <string name="language">语言</string>
+    <string name="type_management">类别管理</string>
+    <string name="layout_management">系统布局</string>
+    <string name="account">账户</string>
+    <string name="logout">退出登录</string>
+
+    <!-- Add_fragment -->
+    <string name="add_fragment">新建交易</string>
+    <string name="chose_group">选择交易组</string>
+    <string name="name_transaction">交易名称</string>
+    <string name="amount_transaction">交易金额</string>
+    <string name="date_transaction">交易日期</string>
+    <string name="note_transaction">备注</string>
+
+    <!-- Permissions -->
+    <string name="permission_needed">需要权限</string>
+    <string name="permission_rationale">应用需要访问您的相册以便您为类别选择图标。</string>
+    <string name="allow">允许</string>
+    <string name="permission_denied">权限被拒绝</string>
+    <string name="permission_denied_message">您已拒绝相册访问权限。请前往设置以启用此权限。</string>
+    <string name="open_settings">打开设置</string>
+
+    <!-- Confirmation -->
+    <string name="confirm_delete">确认删除</string>
+    <string name="confirm_delete_transaction">您确定要删除此交易吗？</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="update">更新</string>
+
+    <!-- Days of week -->
+    <string name="monday">星期一</string>
+    <string name="tuesday">星期二</string>
+    <string name="wednesday">星期三</string>
+    <string name="thursday">星期四</string>
+    <string name="friday">星期五</string>
+    <string name="saturday">星期六</string>
+    <string name="sunday">星期日</string>
+
+    <!-- Category Names -->
+    <string name="category_salary">工资</string>
+    <string name="category_bonus">奖金</string>
+    <string name="category_investment">投资</string>
+    <string name="category_other_money">其他收入</string>
+    <string name="category_food">食品</string>
+    <string name="category_coffee">咖啡</string>
+    <string name="category_gas">交通</string>
+    <string name="category_fashion">时尚</string>
+    <string name="category_entertainment">娱乐</string>
+    <string name="category_pet">宠物</string>
+    <string name="category_education">教育</string>
+    <string name="category_medical">医疗</string>
+    <string name="category_travel">旅游</string>
+    <string name="category_bill">水费</string>
+    <string name="category_gift">礼物</string>
+
+    <!-- Tab titles -->
+    <string name="tab_expense">支出</string>
+    <string name="tab_income">收入</string>
+
+    <!-- Empty states -->
+    <string name="no_categories">还没有类别</string>
+    <string name="add_first_category">添加您的第一个类别</string>
+</resources>

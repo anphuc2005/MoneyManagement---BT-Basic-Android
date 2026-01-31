@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#1E2A3A">
+
+    <LinearLayout
+        android:id="@+id/date_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="22/04/2022"
+            android:textColor="#B0BEC5"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/day_type_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thứ sáu"
+            android:textColor="#B0BEC5"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="16dp"
+        android:background="?android:attr/selectableItemBackground">
+
+        <!-- FrameLayout chứa cả ImageView và TextView cho icon -->
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/circle">
+
+            <!-- ImageView cho ảnh custom và drawable -->
+            <ImageView
+                android:id="@+id/transaction_icon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/salary" />
+
+            <!-- TextView cho emoji -->
+            <TextView
+                android:id="@+id/transaction_emoji"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="28sp"
+                android:visibility="gone"
+                tools:text="🍕"
+                tools:visibility="visible" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/transaction_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ăn uống"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/transaction_note"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/note_transaction"
+                android:textColor="#B0BEC5"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

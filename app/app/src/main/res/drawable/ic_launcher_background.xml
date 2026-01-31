@@ -1,0 +1,38 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Main background -->
+    <path
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z"
+        android:fillColor="#2E7D5A"/>
+
+    <!-- Gradient overlay -->
+    <path
+        android:pathData="M0,0 L108,0 L108,108 L0,108 Z"
+        android:fillColor="#4CAF50"
+        android:fillAlpha="0.7"/>
+
+    <!-- Decorative circles using path -->
+    <path
+        android:pathData="M20,12 A8,8 0 1,1 20,28 A8,8 0 1,1 20,12 Z"
+        android:fillColor="#66BB6A"
+        android:fillAlpha="0.3"/>
+
+    <path
+        android:pathData="M88,19 A6,6 0 1,1 88,31 A6,6 0 1,1 88,19 Z"
+        android:fillColor="#66BB6A"
+        android:fillAlpha="0.2"/>
+
+    <path
+        android:pathData="M85,75 A10,10 0 1,1 85,95 A10,10 0 1,1 85,75 Z"
+        android:fillColor="#66BB6A"
+        android:fillAlpha="0.25"/>
+
+    <path
+        android:pathData="M25,78 A7,7 0 1,1 25,92 A7,7 0 1,1 25,78 Z"
+        android:fillColor="#66BB6A"
+        android:fillAlpha="0.2"/>
+</vector>

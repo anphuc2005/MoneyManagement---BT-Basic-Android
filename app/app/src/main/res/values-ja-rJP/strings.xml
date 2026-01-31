@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">支出管理</string>
+
+    <!-- BottomNav -->
+    <string name="transaction">取引帳簿</string>
+    <string name="wallet">財布</string>
+    <string name="statistical">統計</string>
+    <string name="setting">設定</string>
+
+    <!-- Home_fragment -->
+    <string name="hello_label">こんにちは</string>
+
+    <!-- Transaction_Item -->
+    <string name="my_wallet">マイウォレット</string>
+
+    <!-- Wallet_fragment -->
+    <string name="my_account">マイアカウント</string>
+
+    <!-- Statistical_income_fragment -->
+    <string name="income_title">月別収入統計</string>
+    <string name="income_compare">収入タイプの比較</string>
+    <string name="chose_transaction_date">フィルター条件</string>
+    <string name="chose_year">年別フィルター</string>
+
+    <!-- Statistical_expense_fragment -->
+    <string name="expense_title">月別支出統計</string>
+    <string name="expense_compare">支出タイプの比較</string>
+
+    <!-- Setting -->
+    <string name="please_login">ログインしてください</string>
+    <string name="cannot_get_user_info">ユーザー情報を取得できません</string>
+    <string name="please_enter_transaction_name">取引名を入力してください</string>
+    <string name="please_enter_amount">金額を入力してください</string>
+    <string name="amount_must_be_greater_than_zero">金額は0より大きい必要があります</string>
+    <string name="invalid_amount">無効な金額</string>
+    <string name="transaction_added">取引が正常に追加されました</string>
+    <string name="transaction_deleted">取引が削除されました</string>
+    <string name="error_deleting_transaction">取引の削除エラー：%s</string>
+    <string name="category_added">追加されました：%s</string>
+    <string name="category_deleted">%sが削除されました</string>
+    <string name="error_saving_image">画像の保存エラー</string>
+    <string name="cannot_identify_user">ユーザーを識別できません</string>
+    <string name="please_enter_category_name">カテゴリ名を入力してください</string>
+    <string name="please_select_icon">アイコンを選択してください</string>
+    <string name="loading_categories">カテゴリを読み込み中...</string>
+    <string name="cannot_load_image">画像を読み込めません：%s</string>
+    <string name="language">言語</string>
+    <string name="type_management">カテゴリ管理</string>
+    <string name="layout_management">システムレイアウト</string>
+    <string name="account">アカウント</string>
+    <string name="logout">ログアウト</string>
+
+    <!-- Add_fragment -->
+    <string name="add_fragment">新規取引</string>
+    <string name="chose_group">取引グループを選択</string>
+    <string name="name_transaction">取引名</string>
+    <string name="amount_transaction">取引金額</string>
+    <string name="date_transaction">取引日</string>
+    <string name="note_transaction">メモ</string>
+
+    <!-- Permissions -->
+    <string name="permission_needed">権限が必要です</string>
+    <string name="permission_rationale">カテゴリのアイコンを選択できるように、フォトライブラリへのアクセスが必要です。</string>
+    <string name="allow">許可</string>
+    <string name="permission_denied">権限が拒否されました</string>
+    <string name="permission_denied_message">フォトライブラリへのアクセスが拒否されました。この権限を有効にするには、設定に移動してください。</string>
+    <string name="open_settings">設定を開く</string>
+
+    <!-- Confirmation -->
+    <string name="confirm_delete">削除の確認</string>
+    <string name="confirm_delete_transaction">この取引を削除してもよろしいですか？</string>
+    <string name="save">保存</string>
+    <string name="cancel">キャンセル</string>
+    <string name="update">更新</string>
+
+    <!-- Days of week -->
+    <string name="monday">月曜日</string>
+    <string name="tuesday">火曜日</string>
+    <string name="wednesday">水曜日</string>
+    <string name="thursday">木曜日</string>
+    <string name="friday">金曜日</string>
+    <string name="saturday">土曜日</string>
+    <string name="sunday">日曜日</string>
+
+    <!-- Category Names -->
+    <string name="category_salary">給料</string>
+    <string name="category_bonus">ボーナス</string>
+    <string name="category_investment">投資</string>
+    <string name="category_other_money">その他の収入</string>
+    <string name="category_food">食費</string>
+    <string name="category_coffee">コーヒー</string>
+    <string name="category_gas">交通費</string>
+    <string name="category_fashion">ファッション</string>
+    <string name="category_entertainment">娯楽</string>
+    <string name="category_pet">ペット</string>
+    <string name="category_education">教育</string>
+    <string name="category_medical">医療</string>
+    <string name="category_travel">旅行</string>
+    <string name="category_bill">水道料金</string>
+    <string name="category_gift">ギフト</string>
+
+    <!-- Tab titles -->
+    <string name="tab_expense">支出</string>
+    <string name="tab_income">収入</string>
+
+    <!-- Empty states -->
+    <string name="no_categories">まだカテゴリがありません</string>
+    <string name="add_first_category">最初のカテゴリを追加</string>
+</resources>
