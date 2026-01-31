@@ -116,20 +116,21 @@ class WalletFragment : Fragment() {
                 categoryAdapter.submitList(groupedItems)
             }
         }
+//        updateProgressBar()
 
         val formatter = NumberFormat.getCurrencyInstance(Locale("vi", "VN"))
 
         transactionViewModel.balance.observe(viewLifecycleOwner) { balance ->
-            binding.tvBalance.text = formatter.format(balance ?: 0.0)
+//            binding.tvBalance.text = formatter.format(balance ?: 0.0)
         }
 
         transactionViewModel.totalIncome.observe(viewLifecycleOwner) { income ->
-            binding.tvIncome.text = "+${formatter.format(income ?: 0.0)}"
+//            binding.tvIncome.text = "+${formatter.format(income ?: 0.0)}"
             updateProgressBar()
         }
 
         transactionViewModel.totalExpense.observe(viewLifecycleOwner) { expense ->
-            binding.tvExpense.text = "-${formatter.format(expense ?: 0.0)}"
+//            binding.tvExpense.text = "-${formatter.format(expense ?: 0.0)}"
             updateProgressBar()
         }
     }
@@ -137,18 +138,19 @@ class WalletFragment : Fragment() {
     private fun updateProgressBar() {
         val totalIncome = transactionViewModel.totalIncome.value ?: 0.0
         val totalExpense = transactionViewModel.totalExpense.value ?: 0.0
+        binding.progressBar.setupChart(totalIncome, totalExpense)
 
-        if (totalIncome > 0) {
-            binding.incomeProgress.max = totalIncome.toInt()
-            binding.expenseProgress.max = totalIncome.toInt()
-            binding.incomeProgress.progress = totalIncome.toInt()
-            binding.expenseProgress.progress = totalExpense.toInt()
-        } else {
-            binding.incomeProgress.max = 1
-            binding.expenseProgress.max = 1
-            binding.incomeProgress.progress = 0
-            binding.expenseProgress.progress = 0
-        }
+//        if (totalIncome > 0) {
+//            binding.incomeProgress.max = totalIncome.toInt()
+//            binding.expenseProgress.max = totalIncome.toInt()
+//            binding.incomeProgress.progress = totalIncome.toInt()
+//            binding.expenseProgress.progress = totalExpense.toInt()
+//        } else {
+//            binding.incomeProgress.max = 1
+//            binding.expenseProgress.max = 1
+//            binding.incomeProgress.progress = 0
+//            binding.expenseProgress.progress = 0
+//        }
     }
 
 

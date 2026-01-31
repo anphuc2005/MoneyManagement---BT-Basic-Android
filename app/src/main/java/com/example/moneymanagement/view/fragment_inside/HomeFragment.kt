@@ -1,6 +1,5 @@
 package com.example.moneymanagement.view.fragment_inside
 
-import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,23 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.moneymanagement.MyApp
-import com.example.moneymanagement.R
 import com.example.moneymanagement.adapter.TransactionAdapter
-import com.example.moneymanagement.utils.LineChartHelper
 import com.example.moneymanagement.utils.TransactionGroupHelper
 import com.example.moneymanagement.utils.UserManager
-import com.example.moneymanagement.data.model.TransactionDatabase
 import com.example.moneymanagement.data.model.TransactionWithCategory
-import com.example.moneymanagement.data.repository.TransactionRepository
 import com.example.moneymanagement.databinding.FragmentHomeBinding
 import com.example.moneymanagement.databinding.BottomDialogTransactionOptionsBinding
-import com.example.moneymanagement.utils.chart.FinancialChartView
 import com.example.moneymanagement.viewmodel.TransactionViewModel
 import com.example.moneymanagement.viewmodel.TransactionViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -33,12 +26,6 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-//    private val app: MyApp by lazy { requireActivity().application as MyApp }
-//
-//    private val transactionViewModel: TransactionViewModel by activityViewModels {
-//        TransactionViewModelFactory(app.repository)
-//    }
     private lateinit var transactionViewModel: TransactionViewModel
 
     private lateinit var transactionAdapter: TransactionAdapter
@@ -86,9 +73,6 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         transactionAdapter = TransactionAdapter(
-            onItemClick = { transaction ->
-                showTransactionDetails(transaction)
-            },
             onItemLongClick = { transaction ->
                 showTransactionOptionsDialog(transaction)
             }
@@ -172,10 +156,6 @@ class HomeFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
-            val summary = transactionViewModel.getTransactionSummary()
-            updateSummaryUI(summary)
-        }
     }
 
     private fun updateUserName() {
@@ -209,19 +189,10 @@ class HomeFragment : Fragment() {
         binding.chartCard.setupChart(transactions)
     }
 
-    private fun updateSummaryUI(summary: com.example.moneymanagement.data.model.TransactionSummary) {
-        // TODO: Update summary UI
-    }
-
-    private fun showTransactionDetails(transaction: TransactionWithCategory) {
-        // TODO: Show transaction details
-    }
-
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
             val summary = transactionViewModel.getTransactionSummary()
-            updateSummaryUI(summary)
         }
     }
 

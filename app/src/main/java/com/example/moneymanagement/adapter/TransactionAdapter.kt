@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TransactionAdapter(
-    private val onItemClick: (TransactionWithCategory) -> Unit,
     private val onItemLongClick: (TransactionWithCategory) -> Unit
 ) : ListAdapter<TransactionListItem, RecyclerView.ViewHolder>(TransactionDiffCallback()) {
 
@@ -59,7 +58,7 @@ class TransactionAdapter(
             }
             is TransactionViewHolder -> {
                 val item = getItem(position) as TransactionListItem.TransactionItem
-                holder.bind(item.transactionWithCategory, onItemClick, onItemLongClick)
+                holder.bind(item.transactionWithCategory, onItemLongClick)
             }
         }
     }
@@ -101,7 +100,6 @@ class TransactionAdapter(
 
         fun bind(
             transaction: TransactionWithCategory,
-            onItemClick: (TransactionWithCategory) -> Unit,
             onItemLongClick: (TransactionWithCategory) -> Unit
         ) {
             transactionTitle.text = transaction.transaction.transaction_name
@@ -126,9 +124,6 @@ class TransactionAdapter(
 
             setIconForCategory(transaction.category?.icon)
 
-            itemView.setOnClickListener {
-                onItemClick(transaction)
-            }
 
             itemView.setOnLongClickListener {
                 onItemLongClick(transaction)
